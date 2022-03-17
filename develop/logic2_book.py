@@ -10,7 +10,7 @@ mylogic = Logic(
     func=join_string,
     input_schema={"str1": "string", "str2": "string"},
     output_schema={"result": "string"},
-    readme="",
+    readme="# Test of Logic2",
 )
 
 input = {

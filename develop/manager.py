@@ -38,7 +38,9 @@ class Logic:
         self.examples.append(Example(name, input, output))
 
     def add_test(self, name, filename):
-        self.tests.append(Test(name, filename))
+        test = Test(name, filename)
+        test.run()
+        self.tests.append(test)
 
     def json(self):
         print("json")
@@ -67,6 +69,7 @@ class Example:
             "output": self.output,
         }
 
+# TODO Add ID
 class Test:
     def __init__(self, name, filename):
         self.name=name

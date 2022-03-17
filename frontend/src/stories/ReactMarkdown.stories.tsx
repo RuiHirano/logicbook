@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { Story, Meta } from '@storybook/react'
-import TestPanel, { Props } from '../components/TestPanel';
+import MarkdownPanel, { Props } from '../components/MarkdownPanel';
 
 export default {
-  component: TestPanel,
-  title: 'Components/TestPanel',
+  component: MarkdownPanel,
+  title: 'Components/MarkdownPanel',
 };
 
-const Template: Story<Props> = args => <div style={{ height: window.innerHeight }}><TestPanel {...args} /></div>;
+const Template: Story<Props> = args => <div style={{ height: window.innerHeight }}><MarkdownPanel {...args} /></div>;
 
 export const Default = Template.bind({})
 Default.args = {
@@ -27,6 +27,4 @@ Default.args = {
       code: "code2",
     }]
   },
-  onExecuteTest: (test: any) => { console.log("executed", test) },
-  onExecuteAllTest: () => { console.log("executed all") },
 }

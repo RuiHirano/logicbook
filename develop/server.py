@@ -56,6 +56,18 @@ async def execute(data: ExecuteModel):
     result = sum_logic(a=data.a, b=data.b)
     return result
 
+
+class ExecuteTestModel(BaseModel):
+    name: str
+
+@app.post("/execute/test")
+async def execute_test(data: ExecuteTestModel):
+    for logic in app.manager.logics:
+        for test in logic.tests:
+            if test.name == data.name:
+                test.run()
+    return None
+
 @app.get("/file")
 async def get_file():
     path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/test_logic1.py"

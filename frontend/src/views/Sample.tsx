@@ -5,6 +5,9 @@ import { TextField, Typography, Button, Paper } from '@mui/material'
 import SideBar from "../components/SideBar";
 import ExamplePanel from "../components/ExamplePanel";
 import TestPanel from "../components/TestPanel";
+import MarkdownPanel from "../components/MarkdownPanel";
+import Footer from "../components/Footer";
+import VersionPanel from "../components/VersionPanel";
 
 const backendAddr = "http://localhost:8000"
 const api = new API(backendAddr)
@@ -20,7 +23,7 @@ const Sample: React.FC = () => {
             console.log(data)
             setLogics(data)
             if (data.length > 0) {
-                setLogic(data[0])
+                setLogic(data[1])
             }
         })()
     }, [])
@@ -32,6 +35,18 @@ const Sample: React.FC = () => {
         return result
     }
 
+    const handleExecuteTest = async (test: any) => {
+        const data = { name: test.name }
+        const result = await api.executeTest(data)
+        console.log(result)
+    }
+
+    const handleExecuteAllTest = async (logic: any) => {
+        for (let test of logic.tests) {
+            await handleExecuteTest(test)
+        }
+    }
+
     return (
         <div>
             <SideBar logics={logics} onLogicClick={(logic) => { setLogic(logic) }} />
@@ -41,36 +56,27 @@ const Sample: React.FC = () => {
                     <div>
                         <h1>{logic.name}</h1>
                         <Typography variant="h6">{"logic1.sum_logic"}</Typography>
-                        <h2>Version</h2>
-                        <Paper style={{ padding: 30 }}>
-                            <Typography variant="h6">{"Version: 1.0.2"}</Typography>
-                            <Typography variant="h6">{"Branch: develop"}</Typography>
-                            <Typography variant="h6">{"Commit: 8edm23c"}</Typography>
-                        </Paper>
-                        <h2>ReadMe</h2>
-                        <Paper style={{ padding: 30 }}>
-                            <Typography>{"Description of SumLogic"}</Typography>
-                        </Paper>
+                        <VersionPanel logic={logic} />
+                        <MarkdownPanel logic={logic} />
                         <ExamplePanel
                             logic={logic}
                             onExecute={handleExecute}
                         />
-                        <h2>Usage</h2>
-                        <div style={{ height: 150 }}>
-                            {<LogTerminal text={
-                                `from logic1 import sum_logic\n\nresult = sum_logic.sum(1, 2)`
-                            } loading={false} />}
-                        </div>
+                        <TestPanel
+                            logic={logic}
+                            onExecuteTest={(test: any) => { handleExecuteTest(test) }}
+                            onExecuteAllTest={() => handleExecuteAllTest(logic)}
+                        />
                         <h2>Code</h2>
                         <div style={{ height: 300 }}>
                             {logic.code && <LogTerminal text={logic.code} loading={false} />}
                         </div>
-                        <TestPanel
-                            logic={logic}
-                            onExecute={() => { }}
-                        />
+                        <div style={{ height: 200 }} />
                     </div>
                 }
+            </div>
+            <div style={{ paddingLeft: 250 }}>
+                <Footer />
             </div>
         </div>
     );

@@ -131,4 +131,13 @@ export default class API {
         const result = res.data
         return result
     }
+
+    async executeTest(data: any) {
+        const res: any = await this.post({
+            url: '/execute/test',
+            data: data,
+        });
+        const result = res.data
+        return result
+    }
 }

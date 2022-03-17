@@ -15,8 +15,10 @@ mylogic = Logic(
     func=sum_logic,
     input_schema={"a": "int", "b": "int"},
     output_schema={"result": "int"},
-    readme="",
+    readme="# Test of Logic1",
 )
 
 mylogic.add_example(name="default", input=input, output={"result": 3})
 mylogic.add_test(name="Test of Logic1", filename="test_logic1.py")
+mylogic.add_test(name="Test2 of Logic1", filename="test_logic1.py")
+mylogic.add_test(name="Test3 of Logic1", filename="test_logic1.py")

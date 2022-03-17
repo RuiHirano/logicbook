@@ -8,10 +8,11 @@ export interface Props {
 }
 
 const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
-  console.log(logic)
-  const [examples, setExamples] = useState(_.cloneDeep([...logic.examples]))
+  const defaultExamples = _.cloneDeep([...logic.examples])
+  const [examples, setExamples] = useState(defaultExamples)
   const [selectedIndex, setSelectedIndex] = useState(examples.length > 0 ? 0 : null)
   const [output, setOutput] = useState(null)
+  console.log('ExamplePanel', logic.examples, examples)
 
   useEffect(() => {
     (async () => {
@@ -45,14 +46,14 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
           <div>
             <ButtonGroup variant="outlined" aria-label="outlined primary button group">
               {examples.map((ex: any, i: number) => (
-                <Button size="small" onClick={() => setSelectedIndex(i)}>{ex.name}</Button>
+                <Button key={i} size="small" onClick={() => setSelectedIndex(i)}>{ex.name}</Button>
               ))}
             </ButtonGroup>
             <h3>Input</h3>
             {Object.keys(examples[selectedIndex].input).map((key: any) => {
               console.log(key, examples[selectedIndex])
               return (
-                <TextField size="small" label={key} value={examples[selectedIndex].input[key]}
+                <TextField key={`${examples[selectedIndex].name}_${key}`} size="small" label={key} value={examples[selectedIndex].input[key]}
                   onChange={(e) => {
                     const newExamples = [...examples]
                     newExamples[selectedIndex].input[key] = e.target.value
