@@ -107,14 +107,6 @@ export default class API {
         );
     }
 
-    async getFileData() {
-        const res: any = await this.get({
-            url: '/file'
-        });
-        const data = res.data
-        return data
-    }
-
     async getData() {
         const res: any = await this.get({
             url: '/data'

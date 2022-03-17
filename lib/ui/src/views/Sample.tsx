@@ -23,20 +23,19 @@ const Sample: React.FC = () => {
             console.log(data)
             setLogics(data)
             if (data.length > 0) {
-                setLogic(data[1])
+                setLogic(data[0])
             }
         })()
     }, [])
 
-    const handleExecute = async (input: any) => {
-        const data = input
+    const handleExecute = async (data: any) => {
         const result = await api.execute(data)
         console.log(result)
         return result
     }
 
     const handleExecuteTest = async (test: any) => {
-        const data = { name: test.name }
+        const data = { id: test.id }
         const result = await api.executeTest(data)
         console.log(result)
     }

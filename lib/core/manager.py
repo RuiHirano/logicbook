@@ -30,7 +30,7 @@ class Logic:
         self.code = self.get_code()
 
     def get_code(self):
-        path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/{}".format(self.filename)
+        path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/lib/core/{}".format(self.filename)
         code = None
         with open(path) as f:
             code = f.read()

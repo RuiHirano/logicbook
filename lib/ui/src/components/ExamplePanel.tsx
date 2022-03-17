@@ -7,34 +7,61 @@ export interface Props {
   onExecute: (input: any) => any
 }
 
+// TODO: fix useState to store the input value
 const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
   const defaultExamples = _.cloneDeep([...logic.examples])
-  const [examples, setExamples] = useState(defaultExamples)
+  const [examples, setExamples] = useState([...logic.examples])
   const [selectedIndex, setSelectedIndex] = useState(examples.length > 0 ? 0 : null)
   const [output, setOutput] = useState(null)
-  console.log('ExamplePanel', logic.examples, examples)
 
   useEffect(() => {
     (async () => {
+      setExamples([...logic.examples])
       if (selectedIndex !== null) {
-        const input = examples[selectedIndex].input
-        const result = await onExecute(input)
+        const data = { id: logic.id, input: logic.examples[selectedIndex].input }
+        const result = await onExecute(data)
         setOutput(result)
       }
     })()
-  }, [])
+  }, [logic])
 
 
   const handleReset = async (index: number) => {
     const newExamples = [...examples]
-    newExamples[index].input = _.cloneDeep(logic.examples)[index].input
+    newExamples[index].input = _.cloneDeep(examples)[index].input
     setExamples(newExamples)
   }
 
   const handleExecute = async (index: number) => {
-    const reuslt = await onExecute(examples[index].input)
-    console.log("result", reuslt)
+    const data = { id: logic.id, input: logic.examples[index].input }
+    const reuslt = await onExecute(data)
     setOutput(reuslt)
+  }
+
+  const convertValueToString = (value: any, type: string) => {
+    if (type === 'string') {
+      return value
+    } else if (type === 'number') {
+      return value.toString()
+    } else if (type === 'boolean') {
+      return value.toString()
+    } else if (type === 'object') {
+      return JSON.stringify(value, null, 2)
+    }
+    return value
+  }
+
+  const convertStringToValue = (string: any, type: string) => {
+    if (type === 'string') {
+      return string
+    } else if (type === 'number') {
+      return parseFloat(string)
+    } else if (type === 'boolean') {
+      return string === 'true'
+    } else if (type === 'object') {
+      return JSON.parse(string)
+    }
+    return string
   }
 
   return (
@@ -51,12 +78,21 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
             </ButtonGroup>
             <h3>Input</h3>
             {Object.keys(examples[selectedIndex].input).map((key: any) => {
-              console.log(key, examples[selectedIndex])
+              const value = examples[selectedIndex].input[key]
+              const str_value = convertValueToString(value, typeof value)
+
+              console.log(key, examples[selectedIndex].input[key], value, typeof value)
               return (
-                <TextField key={`${examples[selectedIndex].name}_${key}`} size="small" label={key} value={examples[selectedIndex].input[key]}
+                <TextField
+                  key={`${examples[selectedIndex].name}_${key}`}
+                  size="small"
+                  label={key}
+                  type={typeof value === "number" ? "number" : "text"}
+                  multiline
+                  value={str_value}
                   onChange={(e) => {
                     const newExamples = [...examples]
-                    newExamples[selectedIndex].input[key] = e.target.value
+                    newExamples[selectedIndex].input[key] = convertStringToValue(e.target.value, typeof value)
                     setExamples(newExamples)
                   }}
                 />)
@@ -64,7 +100,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
             <Button variant="contained" onClick={() => handleExecute(selectedIndex)}>Execute</Button>
             <Button onClick={() => handleReset(selectedIndex)}>Reset</Button>
             <h3>Output</h3>
-            <Typography>{output}</Typography>
+            <Typography>{convertValueToString(output, typeof output)}</Typography>
           </div>
         }
       </Paper>

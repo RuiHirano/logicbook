@@ -30,13 +30,13 @@ async def startup_event():
     watcher_thread = threading.Thread(target=run_watcher)
     watcher_thread.start()
     # add logic
-    logics_dir = Path('/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/')
+    logics_dir = Path('/Users/ruihirano/MyProjects/FelixPort/logicbook/lib/core/')
     for file in logics_dir.glob('*_book.py'):
         print(file.name)
         module_name = file.name.split('.')[0]
-        module1 = importlib.import_module(module_name)
-        print(module1.mylogic.name)
-        app.manager.add_logic(module1.mylogic)
+        module = importlib.import_module(module_name)
+        print(module.mylogic.name)
+        app.manager.add_logic(module.mylogic)
 
 @app.get("/logic/register")
 async def register_logic():
@@ -72,22 +72,6 @@ async def execute_test(data: ExecuteTestModel):
                 test.run()
     return None
 
-@app.get("/file")
-async def get_file():
-    path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/test_logic1.py"
-    test_file = None
-    with open(path) as f:
-        test_file = f.read()
-    path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/logic1.py"
-    file = None
-    with open(path) as f:
-        file = f.read()
-    data = {
-        "test_file": test_file,
-        "file": file,
-    }
-    return data
-
 @app.get("/data")
 async def get_data():
     print(len(app.manager.logics))
@@ -105,7 +89,7 @@ def logic1_test():
 # 変更検知
 def run_watcher():
     # 監視対象ディレクトリを指定する
-    target_dir = '/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/'
+    target_dir = '/Users/ruihirano/MyProjects/FelixPort/logicbook/lib/core/'
     # ファイル監視の開始
     event_handler = FileChangeHandler()
     observer = Observer()

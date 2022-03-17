@@ -1,6 +1,6 @@
 import React from "react";
 import { Drawer, Box, List, ListItem, Divider, ListItemIcon, ListItemText } from '@mui/material'
-import { MoveToInbox, Mail } from '@mui/icons-material';
+import { Apps, GridOn } from '@mui/icons-material';
 
 export interface Props {
   logics: any[],
@@ -18,15 +18,15 @@ const SideBar: React.FC<Props> = ({ logics, onLogicClick }) => {
       >
         <List>
           <ListItem button key={"Logicbook"}>
-            <ListItemText primary={"Logicbook"} />
+            <ListItemText primaryTypographyProps={{ fontWeight: 'bold' }} primary={"Logicbook"} />
           </ListItem>
         </List>
         <Divider />
         <List>
           {logics.map((logic, index) => (
-            <ListItem button key={logic.name} onClick={() => onLogicClick(logic)}>
+            <ListItem dense button key={logic.name} onClick={() => onLogicClick(logic)}>
               <ListItemIcon>
-                {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
+                <Apps />
               </ListItemIcon>
               <ListItemText primary={logic.name} />
             </ListItem>
