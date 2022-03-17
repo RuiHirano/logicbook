@@ -2,6 +2,10 @@
 from typing import List
 import subprocess
 import uuid
+from pathlib import Path
+import os
+core_dir = Path(os.path.dirname(__file__)).resolve()
+project_dir = Path(os.getcwd()).resolve()
 
 class LogicManager:
     def __init__(self):
@@ -30,7 +34,7 @@ class Logic:
         self.code = self.get_code()
 
     def get_code(self):
-        path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/lib/core/{}".format(self.filename)
+        path = project_dir.joinpath(self.filename).resolve()
         code = None
         with open(path) as f:
             code = f.read()
@@ -82,7 +86,7 @@ class Test:
         self.code = self.get_code()
     
     def get_code(self):
-        path = "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/{}".format(self.filename)
+        path = project_dir.joinpath(self.filename).resolve()
         code = None
         with open(path) as f:
             code = f.read()
@@ -98,7 +102,7 @@ class Test:
         }
 
     def run(self):
-        command = ["python3", "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/{}".format(self.filename)]
+        command = ["python3", project_dir.joinpath(self.filename).resolve()]
         proc = subprocess.run(command)
         print(proc.returncode)
         if proc.returncode == 0:

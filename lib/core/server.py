@@ -1,16 +1,22 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-import subprocess
+from fastapi.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
+from starlette.requests import Request
+from fastapi.responses import HTMLResponse
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 import os
+import subprocess
+import sys
 import time
 import threading
-from logic1 import sum_logic
 from pydantic import BaseModel
 from manager import LogicManager
 import importlib
 from pathlib import Path
+core_dir = Path(os.path.dirname(__file__)).resolve()
+project_dir = Path(os.getcwd()).resolve()
 
 app = FastAPI()
 app.add_middleware(
@@ -21,32 +27,34 @@ app.add_middleware(
     allow_headers=["*"]       # 追記により追加
 )
 
+app.mount("/static", StaticFiles(directory=core_dir.joinpath("../ui/build")), name="build")
 app.manager = LogicManager()
+templates = Jinja2Templates(directory=core_dir.joinpath("../ui/build"))
 
 @app.on_event("startup")
 async def startup_event():
     print("startup")
+    # run ui
+    ui_thread = threading.Thread(target=run_ui)
+    ui_thread.start()
     # run watcher
     watcher_thread = threading.Thread(target=run_watcher)
     watcher_thread.start()
     # add logic
-    logics_dir = Path('/Users/ruihirano/MyProjects/FelixPort/logicbook/lib/core/')
+    logics_dir = project_dir.joinpath('logics').resolve()
+    sys.path.append(str(logics_dir))
     for file in logics_dir.glob('*_book.py'):
         print(file.name)
         module_name = file.name.split('.')[0]
-        module = importlib.import_module(module_name)
+        module = importlib.import_module(module_name, logics_dir)
         print(module.mylogic.name)
         app.manager.add_logic(module.mylogic)
 
-@app.get("/logic/register")
-async def register_logic():
-    return {"message" : "Hello,World"}
+@app.post("/", response_class=HTMLResponse)
+def index(request: Request):
+    print("index")
+    return templates.TemplateResponse('index.html',{'request': request})
 
-class ExecuteModel2(BaseModel):
-    logic_name: str
-    input: object
-
-# TODO: ExecuteModel
 class ExecuteModel(BaseModel):
     id: str
     input : dict
@@ -80,22 +88,15 @@ async def get_data():
     print(data)
     return data
 
-def logic1_test():
-    command = ["python3", "/Users/ruihirano/MyProjects/FelixPort/logicbook/develop/test_logic1.py"]
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    for line in iter(proc.stdout.readline, ''):
-        print(line)
+def run_ui():
+    proc = subprocess.run(["python3", "-m", "http.server", "7000", "--directory", "build"], cwd=str(core_dir.joinpath("../ui")))
 
-# 変更検知
 def run_watcher():
-    # 監視対象ディレクトリを指定する
-    target_dir = '/Users/ruihirano/MyProjects/FelixPort/logicbook/lib/core/'
-    # ファイル監視の開始
+    target_dir = project_dir
     event_handler = FileChangeHandler()
     observer = Observer()
     observer.schedule(event_handler, target_dir, recursive=True)
     observer.start()
-    # 処理が終了しないようスリープを挟んで無限ループ
     try:
         while True:
             time.sleep(0.1)
@@ -103,15 +104,12 @@ def run_watcher():
         observer.stop()
     observer.join()
 
-# FileSystemEventHandler の継承クラスを作成
 class FileChangeHandler(FileSystemEventHandler):
-    # ファイル作成時のイベント
     def on_created(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
         print('%s created' % filename)
 
-    # ファイル変更時のイベント
     def on_modified(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
@@ -120,16 +118,12 @@ class FileChangeHandler(FileSystemEventHandler):
             for test in logic.tests:
                 if test.filename == filename or logic.filename == filename:
                     test.run()
-        #if filename == "logic1.py":
-        #    logic1_test()
 
-    # ファイル削除時のイベント
     def on_deleted(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
         print('%s deleted' % filename)
 
-    # ファイル移動時のイベント
     def on_moved(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)

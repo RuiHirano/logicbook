@@ -1,6 +1,10 @@
 import click
 from .initializer import Initializer
 from .runner import Runner
+from pathlib import Path
+import os
+
+cli_path = Path(os.path.dirname(__file__)).resolve()
 
 @click.group()
 def cmd():

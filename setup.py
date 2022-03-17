@@ -1,7 +1,4 @@
-from setuptools import setup
-from glob import glob
-from os.path import basename
-from os.path import splitext
+from setuptools import setup, find_packages
 
 with open('README.rst') as f:
     readme = f.read()
@@ -12,11 +9,11 @@ install_requires = [x.strip() for x in all_reqs]
 
 setup(
     name="logicbook",
-    version="1.7.0",
-    packages=['logicbook'],
+    version="0.0.1",
+    packages=["lib.core", "lib.cli"],
     include_package_data=True,
     entry_points={
-            "console_scripts": ['logicbook = logicbook.root:main']
+            "console_scripts": ['logicbook = lib.cli.root:main']
         },
     install_requires = install_requires,
     description='Logicbook CLI',
