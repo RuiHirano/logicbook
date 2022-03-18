@@ -49,13 +49,17 @@ export const AppProvider: React.FC<{}> = ({ children }) => {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
+		let id: NodeJS.Timer
 		(async () => {
-			const backendAddr = "http://localhost:8000"
-			const api = new API(backendAddr)
-			const data = await api.getData()
-			dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
-			setLoading(false)
+			id = setInterval(async function () {
+				const backendAddr = "http://localhost:8000"
+				const api = new API(backendAddr)
+				const data = await api.getData()
+				dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
+				setLoading(false)
+			}, 2000);
 		})()
+		return () => clearInterval(id)
 	}, [])
 
 	return (

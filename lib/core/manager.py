@@ -37,15 +37,20 @@ class Logic:
         self.name=name
         self.book_path = Path(os.path.abspath((inspect.stack()[1])[1]))
         self.func_path = Path(os.path.abspath(inspect.getfile(func)))
+        self.readme_path = self.book_path.parent.joinpath(readme).resolve()
         self.func=func
-        self.readme = self.get_markdown(readme) if readme != None else None
+        self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
         self.tests=[]
-        self.tests2=[]
         self.examples = []
         self.code = inspect.getsource(func)
 
-    def get_markdown(self, readme_name):
-        path = self.book_path.parent.joinpath(readme_name).resolve()
+    def update(self):
+        self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
+        self.code = inspect.getsource(self.func)
+        for test in self.tests:
+            test.run()
+
+    def get_markdown(self, path):
         md = None
         with open(path) as f:
             md = f.read()
@@ -77,6 +82,7 @@ class Logic:
             "name": self.name,
             "book_path": str(self.book_path),
             "func_path": str(self.func_path),
+            "readme_path": str(self.readme_path),
             "readme": self.readme,
             "tests": [test.json() for test in self.tests],
             "examples": [ex.json() for ex in self.examples],

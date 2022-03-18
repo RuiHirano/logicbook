@@ -44,8 +44,6 @@ export const Sample: React.FC = () => {
         }
     }
 
-
-
     return (
         <div>
             <SideBar logics={logics} onLogicClick={handleChangeLogic} />

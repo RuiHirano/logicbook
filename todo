@@ -1,7 +1,9 @@
 
 TODOs: 
- ☐ reflect file change and test
+ ✔ reflect file change and test @done(22-03-18 22:01)
  ✔ information panel @done(22-03-18 15:44)
- ☐ minimize, maximize code block and readme 
+ ✔ minimize, maximize code block and readme @done(22-03-18 16:24)
+ ✔ add logic name in url param @done(22-03-18 19:06)
  ✔ add test output to ui @done(22-03-18 15:19)
  ✔ upper sort logic name @done(22-03-18 15:06)
+ ☐ examples default values

@@ -109,9 +109,18 @@ class FileChangeHandler(FileSystemEventHandler):
         filename = os.path.basename(filepath)
         print('%s changed' % filename)
         for logic in app.manager.logics:
+            # update logic if logic file is changed
+            if str(logic.func_path) == filepath or str(logic.book_path) == filepath or str(logic.readme_path) == filepath:
+                print('update logic')
+                logic.update()
+                break
+            # run test if test file is changed
             for test in logic.tests:
-                if test.path == filepath or logic.func_path == filename or logic.book_path == filename:
+                if str(test.path) == filepath:
+                    print("run test", filename)
                     test.run()
+                    logic.update()
+                    break
 
     def on_deleted(self, event):
         filepath = event.src_path
