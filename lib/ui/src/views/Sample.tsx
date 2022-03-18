@@ -29,14 +29,12 @@ export const Sample: React.FC = () => {
 
     const handleExecute = async (data: any) => {
         const result = await api.executeLogic(data)
-        console.log(result)
         return result
     }
 
     const handleExecuteTest = async (test: any) => {
         const data = { id: test.id }
         const result = await api.executeTest(data)
-        console.log(result)
     }
 
     const handleExecuteAllTest = async (logic: any) => {

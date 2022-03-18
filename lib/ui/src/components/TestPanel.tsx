@@ -9,6 +9,11 @@ import FileIcon from '@mui/icons-material/Article';
 import LogTerminal from "./LogTerminal";
 import LoadingButton from '@mui/lab/LoadingButton';
 
+export async function timeout(ms: number) {
+  await new Promise(resolve => setTimeout(resolve, ms));
+  return
+}
+
 export interface Props {
   logic: any
   onExecuteTest: (test: any) => any
@@ -75,21 +80,21 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
                       <FileIcon />
                     </ListItemIcon>
                     <ListItemText primary={test.path} />
-                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                      <LoadingButton loading={loading[i]} onClick={() => handleExecuteTest(i)} variant="outlined" size="small" style={{ margin: 5 }}>Run Test</LoadingButton>
-                    </div>
                   </ListItem>
                 </List>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: 40 }}>
+                  <LoadingButton loading={loading[i]} onClick={() => handleExecuteTest(i)} variant="outlined" size="small" style={{ margin: 5 }}>Run Test</LoadingButton>
+                </div>
                 <div style={{ marginLeft: 40, marginRight: 40 }}>
                   <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Code</Typography>
                   <div style={{ height: 200 }}>
-                    <LogTerminal text={test.code} loading={false} />
+                    <LogTerminal text={loading[i] ? "" : test.code} loading={loading[i]} />
                   </div>
                 </div>
                 <div style={{ marginLeft: 40, marginRight: 40 }}>
                   <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Result</Typography>
                   <div style={{ height: 200 }}>
-                    <LogTerminal text={test.result} loading={false} />
+                    <LogTerminal text={loading[i] ? "" : test.result} loading={loading[i]} />
                   </div>
                 </div>
                 <div style={{ marginBottom: 30 }} />

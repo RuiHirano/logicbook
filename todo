@@ -1,9 +1,11 @@
 
-TODOs: 
+TODOs 20220318: 
  ✔ reflect file change and test @done(22-03-18 22:01)
  ✔ information panel @done(22-03-18 15:44)
  ✔ minimize, maximize code block and readme @done(22-03-18 16:24)
  ✔ add logic name in url param @done(22-03-18 19:06)
  ✔ add test output to ui @done(22-03-18 15:19)
  ✔ upper sort logic name @done(22-03-18 15:06)
- ☐ examples default values
+ ✔ examples default values @done(22-03-18 23:12)
+ ✔ yarn build @done(22-03-19 00:24)
+ ☐ create package and test package (manifest.in templete)
