@@ -7,33 +7,30 @@ export interface Props {
   onExecute: (args: any) => any
 }
 
-// TODO: fix useState to store the args value
 const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
-  const defaultExamples = _.cloneDeep([...logic.examples])
+  const [targetLogic, setTargetLogic] = useState({ ...logic })
   const [examples, setExamples] = useState([...logic.examples])
   const [selectedIndex, setSelectedIndex] = useState(examples.length > 0 ? 0 : null)
   const [output, setOutput] = useState(null)
 
   useEffect(() => {
-    (async () => {
-      setExamples([...logic.examples])
-      if (selectedIndex !== null) {
-        const data = { id: logic.id, args: logic.examples[selectedIndex].args }
-        const result = await onExecute(data)
-        setOutput(result)
-      }
-    })()
+    if (logic.id !== targetLogic.id) {
+      setExamples([...logic.examples]);
+      setTargetLogic({ ...logic });
+      setOutput(null);
+    }
   }, [logic])
 
 
   const handleReset = async (index: number) => {
-    const newExamples = [...examples]
-    newExamples[index].args = _.cloneDeep(examples)[index].args
+    const newExamples = [...targetLogic.examples]
+    newExamples[index].args = logic.examples[index].args
     setExamples(newExamples)
+    setOutput(null)
   }
 
   const handleExecute = async (index: number) => {
-    const data = { id: logic.id, args: logic.examples[index].args }
+    const data = { id: logic.id, args: examples[index].args }
     const reuslt = await onExecute(data)
     setOutput(reuslt)
   }
@@ -101,7 +98,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
               <Button style={{ margin: 5 }} onClick={() => handleReset(selectedIndex)}>Reset</Button>
             </div>
             <h3>Output</h3>
-            <Typography>{convertValueToString(output, typeof output)}</Typography>
+            <Typography>{output ? convertValueToString(output, typeof output) : ""}</Typography>
           </div>
         }
       </Paper>

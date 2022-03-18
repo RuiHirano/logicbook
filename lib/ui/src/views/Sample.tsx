@@ -10,6 +10,7 @@ import MarkdownPanel from "../components/MarkdownPanel";
 import Footer from "../components/Footer";
 import InformationPanel from "../components/InformationPanel";
 import { AppStore } from "../store/app";
+import _ from 'lodash'
 
 const backendAddr = "http://localhost:8000"
 const api = new API(backendAddr)
