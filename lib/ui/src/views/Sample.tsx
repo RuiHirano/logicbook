@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import API from "../api";
 import LogTerminal from "../components/LogTerminal";
-import { TextField, Typography, Button, Paper } from '@mui/material'
+import { makeStyles } from '@mui/styles';
+import { TextField, Typography, Button, Paper, Theme, styled } from '@mui/material'
 import SideBar from "../components/SideBar";
 import ExamplePanel from "../components/ExamplePanel";
 import TestPanel from "../components/TestPanel";
@@ -13,7 +14,6 @@ const backendAddr = "http://localhost:8000"
 const api = new API(backendAddr)
 
 const Sample: React.FC = () => {
-
     const [logics, setLogics] = useState<any>([])
     const [logic, setLogic] = useState<any>(null)
 
@@ -49,7 +49,7 @@ const Sample: React.FC = () => {
     return (
         <div>
             <SideBar logics={logics} onLogicClick={(logic) => { setLogic(logic) }} />
-            <div style={{ margin: 30, paddingLeft: 250 }}>
+            <Body>
                 {!logic && <Typography variant="h5">Loading</Typography>}
                 {logic &&
                     <div>
@@ -72,12 +72,35 @@ const Sample: React.FC = () => {
                         <div style={{ height: 200 }} />
                     </div>
                 }
-            </div>
+            </Body>
             <div style={{ paddingLeft: 250 }}>
                 <Footer />
             </div>
-        </div>
+        </div >
     );
 };
+
+
+const styles = (theme: Theme) => ({
+    root: {
+        padding: theme.spacing(1),
+        [theme.breakpoints.down('lg')]: {
+            backgroundColor: theme.palette.secondary.main,
+        }
+    },
+});
+
+const Body = styled('div')(({ theme }) => ({
+    margin: 30,
+    paddingLeft: 250,
+    [theme.breakpoints.up('lg')]: {
+        marginLeft: 100,
+        marginRight: 100,
+    },
+    [theme.breakpoints.up('xl')]: {
+        marginLeft: 200,
+        marginRight: 200,
+    },
+}));
 
 export default Sample;
