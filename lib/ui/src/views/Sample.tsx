@@ -7,7 +7,7 @@ import ExamplePanel from "../components/ExamplePanel";
 import TestPanel from "../components/TestPanel";
 import MarkdownPanel from "../components/MarkdownPanel";
 import Footer from "../components/Footer";
-import VersionPanel from "../components/VersionPanel";
+import InformationPanel from "../components/InformationPanel";
 
 const backendAddr = "http://localhost:8000"
 const api = new API(backendAddr)
@@ -54,8 +54,7 @@ const Sample: React.FC = () => {
                 {logic &&
                     <div>
                         <h1>{logic.name}</h1>
-                        <Typography variant="h6">{"logic1.sum_logic"}</Typography>
-                        <VersionPanel logic={logic} />
+                        <InformationPanel logic={logic} />
                         <MarkdownPanel logic={logic} />
                         <ExamplePanel
                             logic={logic}

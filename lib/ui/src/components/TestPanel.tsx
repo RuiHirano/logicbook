@@ -74,18 +74,25 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
                     <ListItemIcon>
                       <FileIcon />
                     </ListItemIcon>
-                    <ListItemText primary={test.filename} />
+                    <ListItemText primary={test.path} />
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <LoadingButton loading={loading[i]} onClick={() => handleExecuteTest(i)} variant="outlined" size="small" style={{ margin: 5 }}>Run Test</LoadingButton>
+                    </div>
                   </ListItem>
                 </List>
                 <div style={{ marginLeft: 40, marginRight: 40 }}>
-                  <Typography variant="body1">Code</Typography>
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <LoadingButton loading={loading[i]} onClick={() => handleExecuteTest(i)} variant="outlined" size="small" style={{ margin: 5 }}>Run Test</LoadingButton>
-                  </div>
-                  <div style={{ height: 300 }}>
+                  <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Code</Typography>
+                  <div style={{ height: 200 }}>
                     <LogTerminal text={test.code} loading={false} />
                   </div>
                 </div>
+                <div style={{ marginLeft: 40, marginRight: 40 }}>
+                  <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Result</Typography>
+                  <div style={{ height: 200 }}>
+                    <LogTerminal text={test.result} loading={false} />
+                  </div>
+                </div>
+                <div style={{ marginBottom: 30 }} />
               </Collapse>
             </div>
           ))}

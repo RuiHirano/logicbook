@@ -83,6 +83,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
               return (
                 <TextField
                   key={`${examples[selectedIndex].name}_${key}`}
+                  style={{ margin: 5 }}
                   size="small"
                   label={key}
                   type={typeof value === "number" ? "number" : "text"}
@@ -95,8 +96,10 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
                   }}
                 />)
             })}
-            <Button variant="contained" onClick={() => handleExecute(selectedIndex)}>Execute</Button>
-            <Button onClick={() => handleReset(selectedIndex)}>Reset</Button>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Button style={{ margin: 5 }} variant="contained" onClick={() => handleExecute(selectedIndex)}>Execute</Button>
+              <Button style={{ margin: 5 }} onClick={() => handleReset(selectedIndex)}>Reset</Button>
+            </div>
             <h3>Output</h3>
             <Typography>{convertValueToString(output, typeof output)}</Typography>
           </div>

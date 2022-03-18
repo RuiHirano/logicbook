@@ -20,11 +20,13 @@ Default.args = {
       name: "Test of Logic1",
       status: "success",
       code: "code1",
+      result: "ok",
     }, {
       filename: "test2.py",
       name: "Test of Logic2",
       status: "failure",
       code: "code2",
+      result: "ok",
     }]
   },
   onExecuteTest: (test: any) => { console.log("executed", test) },

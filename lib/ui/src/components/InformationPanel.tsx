@@ -3,20 +3,25 @@ import { Paper, Button, Typography, ListItem, List, ListItemIcon, ListItemText }
 import BranchIcon from '@mui/icons-material/ForkRight';
 import VersionIcon from '@mui/icons-material/GppGood';
 import CommitIcon from '@mui/icons-material/History';
+import FileIcon from '@mui/icons-material/Article';
 export interface Props {
   logic: any
 }
 
-const VersionPanel: React.FC<Props> = ({ logic }) => {
-
+const InformationPanel: React.FC<Props> = ({ logic }) => {
 
   return (
     <div>
-      <h2>Version</h2>
       <Paper>
         {/*<FilesMenu files={menuStatus.files} anchorEl={menuStatus.anchorEl} handleClose={closeMenu} />*/}
         <List >
-          <ListItem divider dense>
+          <ListItem dense>
+            <ListItemIcon>
+              <FileIcon />
+            </ListItemIcon>
+            <ListItemText primary={logic.func_path} />
+          </ListItem>
+          {/*<ListItem divider dense>
             <ListItemIcon>
               <VersionIcon />
             </ListItemIcon>
@@ -33,7 +38,7 @@ const VersionPanel: React.FC<Props> = ({ logic }) => {
               <CommitIcon />
             </ListItemIcon>
             <Typography>{'3fk402'}</Typography>
-          </ListItem>
+          </ListItem>*/}
 
         </List>
       </Paper>
@@ -41,4 +46,4 @@ const VersionPanel: React.FC<Props> = ({ logic }) => {
   )
 };
 
-export default VersionPanel;
+export default InformationPanel;

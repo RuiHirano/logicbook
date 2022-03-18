@@ -105,6 +105,7 @@ class Test:
         self.path = os.path.abspath(inspect.getfile(func))
         self.status="unknown"
         self.code = inspect.getsource(func)
+        self.result = None
     
     def get_code(self):
         path = self.path
@@ -121,13 +122,17 @@ class Test:
             "path": self.path,
             "code": self.code,
             "status": self.status,
+            "result": self.result,
         }
 
     def run(self):
         command = ["python3", self.path, "{}.{}".format(self.cls_name, self.func.__name__)]
-        proc = subprocess.run(command)
-        print(proc.returncode)
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout_data, stderr_data = proc.communicate()
+        print(proc.returncode, stdout_data, stderr_data)
         if proc.returncode == 0:
             self.status = "success"
+            self.result = stderr_data.decode('utf-8')
         else:
             self.status = "failure"
+            self.result = stderr_data.decode('utf-8')

@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { Story, Meta } from '@storybook/react'
-import VersionPanel, { Props } from '../components/VersionPanel';
+import InformationPanel, { Props } from '../components/InformationPanel';
 
 export default {
-  component: VersionPanel,
-  title: 'Components/VersionPanel',
+  component: InformationPanel,
+  title: 'Components/InformationPanel',
 };
 
-const Template: Story<Props> = args => <div style={{ height: window.innerHeight }}><VersionPanel {...args} /></div>;
+const Template: Story<Props> = args => <div style={{ height: window.innerHeight }}><InformationPanel {...args} /></div>;
 
 export const Default = Template.bind({})
 Default.args = {

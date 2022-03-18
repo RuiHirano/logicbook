@@ -1,8 +1,7 @@
 
 TODOs: 
- ☐ reflect file change
- ☐ get meta info from git 
- ☐ update ui
- ☐ minimize, maximize code block and readme
- ☐ add test output to ui
- ☐ upper sort logic name
+ ☐ reflect file change and test
+ ✔ information panel @done(22-03-18 15:44)
+ ☐ minimize, maximize code block and readme 
+ ✔ add test output to ui @done(22-03-18 15:19)
+ ✔ upper sort logic name @done(22-03-18 15:06)
