@@ -10,14 +10,6 @@ mylogic = Logic(
     readme="logic1.md",
 )
 
-# TODO: other name of mylogic
-#TODO add example by running logic
-# TODO: reflect file change
-# TODO: get meta info from git
-# TODO: update ui
-# TODO: minimize, maximize code block and readme
-# TODO: add test output to ui
-# TODO: upper sort logic name
 mylogic.add_example(
     name="default", 
     args={

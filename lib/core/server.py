@@ -8,7 +8,7 @@ import sys
 import time
 import threading
 from pydantic import BaseModel
-from manager import LogicManager
+from manager import LogicManager, Logic
 import importlib
 from pathlib import Path
 import inspect
@@ -42,7 +42,12 @@ async def startup_event():
         sys.path.append(str(file.parent)) # TODO: remove pycache
         module_name = file.name.split('.')[0]
         module = importlib.import_module(module_name, file.parent)
-        app.manager.add_logic(module.mylogic)
+        
+        # add logic
+        for name in dir(module):
+            if isinstance(getattr(module, name), Logic):
+                app.manager.add_logic(getattr(module, name))
+
 
 class ExecuteLogicModel(BaseModel):
     id: str
