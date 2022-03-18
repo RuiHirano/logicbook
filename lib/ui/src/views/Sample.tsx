@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import API from "../api";
 import LogTerminal from "../components/LogTerminal";
-import { makeStyles } from '@mui/styles';
+import { useParams, useNavigate } from "react-router";
 import { TextField, Typography, Button, Paper, Theme, styled } from '@mui/material'
 import SideBar from "../components/SideBar";
 import ExamplePanel from "../components/ExamplePanel";
@@ -9,24 +9,22 @@ import TestPanel from "../components/TestPanel";
 import MarkdownPanel from "../components/MarkdownPanel";
 import Footer from "../components/Footer";
 import InformationPanel from "../components/InformationPanel";
+import { AppStore } from "../store/app";
 
 const backendAddr = "http://localhost:8000"
 const api = new API(backendAddr)
 
-const Sample: React.FC = () => {
-    const [logics, setLogics] = useState<any>([])
-    const [logic, setLogic] = useState<any>(null)
+export const Sample: React.FC = () => {
+    const logics = useContext(AppStore).state.app.data
+    const params = useParams<"name">();
+    const logic_name = params.name
+    const logic = logics.find(logic => logic.name === logic_name)
 
-    useEffect(() => {
-        (async () => {
-            const data = await api.getData()
-            console.log(data)
-            setLogics(data)
-            if (data.length > 0) {
-                setLogic(data[0])
-            }
-        })()
-    }, [])
+    const navigate = useNavigate()
+
+    const handleChangeLogic = (logic: any) => {
+        navigate(`/${logic.name}`)
+    }
 
     const handleExecute = async (data: any) => {
         const result = await api.executeLogic(data)
@@ -46,9 +44,11 @@ const Sample: React.FC = () => {
         }
     }
 
+
+
     return (
         <div>
-            <SideBar logics={logics} onLogicClick={(logic) => { setLogic(logic) }} />
+            <SideBar logics={logics} onLogicClick={handleChangeLogic} />
             <Body>
                 {!logic && <Typography variant="h5">Loading</Typography>}
                 {logic &&

@@ -1,12 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Sample from './views/Sample';
+import Routes from './Routes';
+import { BrowserRouter } from "react-router-dom";
+import StoreProvider from './store';
 
 function App() {
   return (
     <div>
-      <Sample />
+      <StoreProvider>
+        <BrowserRouter>
+          <Routes />
+        </BrowserRouter>
+      </StoreProvider>
     </div>
   );
 }
