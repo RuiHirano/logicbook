@@ -115,9 +115,9 @@ export default class API {
         return data
     }
 
-    async execute(data: any) {
+    async executeLogic(data: any) {
         const res: any = await this.post({
-            url: '/execute',
+            url: '/execute/logic',
             data: data,
         });
         const result = res.data

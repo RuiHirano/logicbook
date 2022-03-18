@@ -7,6 +7,10 @@ class TestSum(unittest.TestCase):
         actual = sum_logic(1, 2)
         self.assertEqual(3, actual)
 
+    def test_sum2(self):
+        actual = sum_logic(1, 2)
+        self.assertEqual(3, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -17,17 +17,17 @@ Default.args = {
     name: "logic1",
     examples: [{
       name: "example1",
-      input: {
+      args: {
         "a": "1",
         "b": "2",
       },
     }, {
       name: "example2",
-      input: {
+      args: {
         "a": "3",
         "b": "5",
       }
     }]
   },
-  onExecute: (input: any) => { console.log("executed", input); return Number(input.a) + Number(input.b); },
+  onExecute: (args: any) => { console.log("executed", args); return Number(args.a) + Number(args.b); },
 }

@@ -1,9 +1,5 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from starlette.templating import Jinja2Templates
-from starlette.requests import Request
-from fastapi.responses import HTMLResponse
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 import os
@@ -15,6 +11,7 @@ from pydantic import BaseModel
 from manager import LogicManager
 import importlib
 from pathlib import Path
+import inspect
 core_dir = Path(os.path.dirname(__file__)).resolve()
 project_dir = Path(os.getcwd()).resolve()
 
@@ -27,9 +24,7 @@ app.add_middleware(
     allow_headers=["*"]       # 追記により追加
 )
 
-app.mount("/static", StaticFiles(directory=core_dir.joinpath("../ui/build")), name="build")
 app.manager = LogicManager()
-templates = Jinja2Templates(directory=core_dir.joinpath("../ui/build"))
 
 @app.on_event("startup")
 async def startup_event():
@@ -42,30 +37,24 @@ async def startup_event():
     watcher_thread.start()
     # add logic
     logics_dir = project_dir.joinpath('logics').resolve()
-    sys.path.append(str(logics_dir))
-    for file in logics_dir.glob('*_book.py'):
-        print(file.name)
+    for file in logics_dir.glob('**/*_book.py'):
+        print(file.name, file.parent)
+        sys.path.append(str(file.parent)) # TODO: remove pycache
         module_name = file.name.split('.')[0]
-        module = importlib.import_module(module_name, logics_dir)
-        print(module.mylogic.name)
+        module = importlib.import_module(module_name, file.parent)
         app.manager.add_logic(module.mylogic)
 
-@app.post("/", response_class=HTMLResponse)
-def index(request: Request):
-    print("index")
-    return templates.TemplateResponse('index.html',{'request': request})
-
-class ExecuteModel(BaseModel):
+class ExecuteLogicModel(BaseModel):
     id: str
-    input : dict
+    args : dict
 
-@app.post("/execute")
-async def execute(data: ExecuteModel):
+@app.post("/execute/logic")
+async def execute_logic(data: ExecuteLogicModel):
     print(data)
     result = None
     for logic in app.manager.logics:
         if logic.id == data.id:
-            result = logic.func(**data.input)
+            result = logic.func(**data.args)
     return result
 
 
@@ -116,7 +105,7 @@ class FileChangeHandler(FileSystemEventHandler):
         print('%s changed' % filename)
         for logic in app.manager.logics:
             for test in logic.tests:
-                if test.filename == filename or logic.filename == filename:
+                if test.path == filepath or logic.func_path == filename or logic.book_path == filename:
                     test.run()
 
     def on_deleted(self, event):

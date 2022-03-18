@@ -12,7 +12,7 @@ const MarkdownPanel: React.FC<Props> = ({ logic }) => {
     <div>
       <h2>README</h2>
       <Paper style={{ padding: 30 }}>
-        <ReactMarkdown>{"# React \n ### test"}</ReactMarkdown>
+        <ReactMarkdown>{logic.readme}</ReactMarkdown>
       </Paper>
     </div>
   )

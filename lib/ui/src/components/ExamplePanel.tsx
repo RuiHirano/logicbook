@@ -4,10 +4,10 @@ import _ from 'lodash'
 
 export interface Props {
   logic: any
-  onExecute: (input: any) => any
+  onExecute: (args: any) => any
 }
 
-// TODO: fix useState to store the input value
+// TODO: fix useState to store the args value
 const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
   const defaultExamples = _.cloneDeep([...logic.examples])
   const [examples, setExamples] = useState([...logic.examples])
@@ -18,7 +18,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
     (async () => {
       setExamples([...logic.examples])
       if (selectedIndex !== null) {
-        const data = { id: logic.id, input: logic.examples[selectedIndex].input }
+        const data = { id: logic.id, args: logic.examples[selectedIndex].args }
         const result = await onExecute(data)
         setOutput(result)
       }
@@ -28,12 +28,12 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
 
   const handleReset = async (index: number) => {
     const newExamples = [...examples]
-    newExamples[index].input = _.cloneDeep(examples)[index].input
+    newExamples[index].args = _.cloneDeep(examples)[index].args
     setExamples(newExamples)
   }
 
   const handleExecute = async (index: number) => {
-    const data = { id: logic.id, input: logic.examples[index].input }
+    const data = { id: logic.id, args: logic.examples[index].args }
     const reuslt = await onExecute(data)
     setOutput(reuslt)
   }
@@ -77,11 +77,9 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
               ))}
             </ButtonGroup>
             <h3>Input</h3>
-            {Object.keys(examples[selectedIndex].input).map((key: any) => {
-              const value = examples[selectedIndex].input[key]
+            {Object.keys(examples[selectedIndex].args).map((key: any) => {
+              const value = examples[selectedIndex].args[key]
               const str_value = convertValueToString(value, typeof value)
-
-              console.log(key, examples[selectedIndex].input[key], value, typeof value)
               return (
                 <TextField
                   key={`${examples[selectedIndex].name}_${key}`}
@@ -92,7 +90,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
                   value={str_value}
                   onChange={(e) => {
                     const newExamples = [...examples]
-                    newExamples[selectedIndex].input[key] = convertStringToValue(e.target.value, typeof value)
+                    newExamples[selectedIndex].args[key] = convertStringToValue(e.target.value, typeof value)
                     setExamples(newExamples)
                   }}
                 />)

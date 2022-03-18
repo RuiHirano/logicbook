@@ -29,7 +29,7 @@ const Sample: React.FC = () => {
     }, [])
 
     const handleExecute = async (data: any) => {
-        const result = await api.execute(data)
+        const result = await api.executeLogic(data)
         console.log(result)
         return result
     }
