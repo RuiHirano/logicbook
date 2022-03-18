@@ -80,16 +80,6 @@ const Sample: React.FC = () => {
     );
 };
 
-
-const styles = (theme: Theme) => ({
-    root: {
-        padding: theme.spacing(1),
-        [theme.breakpoints.down('lg')]: {
-            backgroundColor: theme.palette.secondary.main,
-        }
-    },
-});
-
 const Body = styled('div')(({ theme }) => ({
     margin: 30,
     paddingLeft: 250,
