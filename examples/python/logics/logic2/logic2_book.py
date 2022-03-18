@@ -7,6 +7,7 @@ from test_logic2 import TestJoin
 mylogic = Logic(
     name="JoinString",
     func=join_string,
+    readme="logic2.md",
 )
 
 mylogic.add_example(

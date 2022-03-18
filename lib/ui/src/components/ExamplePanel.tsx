@@ -68,7 +68,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
     <div>
       <h2>Example</h2>
       <Paper style={{ padding: 30 }}>
-        {selectedIndex === null && <Typography variant="h6">{"No example selected"}</Typography>}
+        {selectedIndex === null && <Typography variant="body2" style={{ textAlign: 'center' }}>No Examples</Typography>}
         {selectedIndex !== null &&
           <div>
             <ButtonGroup variant="outlined" aria-label="outlined primary button group">

@@ -1,9 +1,9 @@
-# Logic1 (Sum)
+# Logic2 (JoinString)
 
-This is logic1 description
+This is logic2 description
 
 ### Usage
 ```
-result = sum(a+b)
+result = join_string("hello", "world")
 print(result)
 ```

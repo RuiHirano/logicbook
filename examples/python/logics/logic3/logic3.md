@@ -1,9 +1,8 @@
-# Logic1 (Sum)
+# Logic3 (CreateArgsSample)
 
-This is logic1 description
+This is logic3 description
 
 ### Usage
 ```
-result = sum(a+b)
-print(result)
+xxx
 ```
