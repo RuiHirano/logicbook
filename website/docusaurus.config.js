@@ -8,13 +8,14 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Logicbook',
   tagline: 'Logicbook is a free, open-source-software-library for logic programming.',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://RuiHirano.github.io',
+  baseUrl: '/Logicbook/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'RuiHirano', // Usually your GitHub org/user name.
+  projectName: 'Logicbook', // Usually your repo name.
+  trailingSlash: false,
 
   presets: [
     [
@@ -116,11 +117,3 @@ const config = {
 };
 
 module.exports = config;
-
-module.exports = {
-  url: 'https://RuiHirano.github.io', // Your website URL
-  baseUrl: '/Logicbook/',
-  projectName: 'Logicbook',
-  organizationName: 'RuiHirano',
-  trailingSlash: false,
-};
