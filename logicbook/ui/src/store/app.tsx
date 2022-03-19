@@ -6,6 +6,7 @@ import React, {
 } from 'react'
 import API from '../api';
 import { Typography } from '@mui/material';
+import Loading from '../components/Loading';
 
 export interface App {
 	data: any[]
@@ -57,14 +58,14 @@ export const AppProvider: React.FC<{}> = ({ children }) => {
 				const data = await api.getData()
 				dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
 				setLoading(false)
-			}, 2000);
+			}, 1000);
 		})()
 		return () => clearInterval(id)
 	}, [])
 
 	return (
 		<AppStore.Provider value={{ state, dispatch }}>
-			{loading && <Typography>Loading...</Typography>}
+			{loading && <Loading />}
 			{!loading && children}
 		</AppStore.Provider>
 	)

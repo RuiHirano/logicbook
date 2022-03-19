@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import InformationPanel from "../components/InformationPanel";
 import { AppStore } from "../store/app";
 import _ from 'lodash'
+import Loading from "../components/Loading";
 
 const backendAddr = "http://localhost:8000"
 const api = new API(backendAddr)
@@ -19,6 +20,7 @@ export const Sample: React.FC = () => {
     const logics = useContext(AppStore).state.app.data
     const params = useParams<"name">();
     const logic_name = params.name
+    console.log(logics, params, logic_name, logics.find)
     const logic = logics.find(logic => logic.name === logic_name)
     const navigate = useNavigate()
 
@@ -29,7 +31,7 @@ export const Sample: React.FC = () => {
     }, [])
 
     const handleChangeLogic = (logic: any) => {
-        navigate(`/${logic.name}`)
+        navigate(`/logics/${logic.name}`)
     }
 
     const handleExecute = async (data: any) => {
@@ -52,7 +54,7 @@ export const Sample: React.FC = () => {
         <div>
             <SideBar logics={logics} onLogicClick={handleChangeLogic} />
             <Body>
-                {!logic && <Typography variant="h5">Loading</Typography>}
+                {!logic && <Loading />}
                 {logic &&
                     <div>
                         <h1>{logic.name}</h1>
