@@ -7,9 +7,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Logicbook',
-  tagline: 'Logicbook is a free, open-source-software-library for logic programming.',
+  tagline: 'Logicbook is an open source tool for building python logics in isolation. It streamlines logic development, testing, and documentation.',
   url: 'https://RuiHirano.github.io',
-  baseUrl: '/Logicbook/',
+  baseUrl: '/logicbook/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -44,9 +44,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'My Site',
+        title: 'Logicbook',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Logicbook Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -58,7 +58,7 @@ const config = {
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/RuiHirano/logicbook',
             label: 'GitHub',
             position: 'right',
           },
@@ -102,7 +102,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/RuiHirano/logicbook',
               },
             ],
           },
