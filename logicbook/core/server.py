@@ -37,7 +37,7 @@ async def serve_ui2(request: Request, name: str):
     return templates.TemplateResponse("index.html", {"request": request})
 
 app.manager = LogicManager()
-
+alive = True
 @app.on_event("startup")
 async def startup_event():
     # run ui
@@ -58,6 +58,10 @@ async def startup_event():
             if isinstance(getattr(module, name), Logic):
                 app.manager.add_logic(getattr(module, name))
 
+@app.on_event("shutdown")
+def shutdown_event():
+    global alive
+    alive = False
 
 class ExecuteLogicModel(BaseModel):
     id: str
@@ -99,10 +103,12 @@ def run_watcher():
     observer.schedule(event_handler, target_dir, recursive=True)
     observer.start()
     try:
-        while True:
+        global arive
+        while alive:
             time.sleep(0.1)
     except KeyboardInterrupt:
         observer.stop()
+    observer.stop()
     observer.join()
 
 class FileChangeHandler(FileSystemEventHandler):
