@@ -1,7 +1,5 @@
-
-import requests
 from logic2 import join_string
-from manager import Logic
+from logicbook import Logic
 from test_logic2 import TestJoin
 
 mylogic = Logic(

@@ -1,7 +1,6 @@
 
-import requests
 from logic1 import sum_logic
-from manager import Logic
+from logicbook import Logic
 from test_logic1 import TestSum
 
 mylogic = Logic(

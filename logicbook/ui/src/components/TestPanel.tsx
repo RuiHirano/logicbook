@@ -6,8 +6,10 @@ import SuccessIcon from '@mui/icons-material/CheckCircleOutline';
 import UnknownIcon from '@mui/icons-material/Loop';
 import FailureIcon from '@mui/icons-material/ErrorOutline';
 import FileIcon from '@mui/icons-material/Article';
+import TimeIcon from '@mui/icons-material/AccessTime';
 import LogTerminal from "./LogTerminal";
 import LoadingButton from '@mui/lab/LoadingButton';
+import moment from "moment";
 
 export async function timeout(ms: number) {
   await new Promise(resolve => setTimeout(resolve, ms));
@@ -46,6 +48,7 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
     setLoadingAll(false)
   }
 
+  console.log(logic.tests)
   return (
     <div>
       <h2>Test</h2>
@@ -80,6 +83,12 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
                       <FileIcon />
                     </ListItemIcon>
                     <ListItemText primary={test.path} />
+                  </ListItem>
+                  <ListItem sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <TimeIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={moment(test.latest_run_time).format("YYYY/MM/DD HH:mm:ss")} />
                   </ListItem>
                 </List>
                 <div style={{ display: "flex", justifyContent: "flex-end", marginRight: 40 }}>

@@ -34,3 +34,8 @@ twine upload --repository testpypi dist/*
 # for prod
 twine upload --repository pypi dist/*
 ```
+
+```
+$ pip install --index-url https://test.pypi.org/simple/ logicbook
+$ pip install logicbook
+```

@@ -6,6 +6,7 @@ const Routes: React.FC = () => {
 
     return (
         <RouteList>
+            <Route path="/" element={<Sample />} />
             <Route path="/:name" element={<Sample />} />
             <Route element={<Navigate replace to="/not-found" />} />
         </RouteList>

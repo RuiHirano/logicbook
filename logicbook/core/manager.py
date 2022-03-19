@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from typing import List
 import subprocess
 import uuid
@@ -24,7 +25,6 @@ class LogicManager:
 def get_test_names(cls):
     import types
     result = [ ]
-    print(cls.__dict__, types.FunctionType)
     for var in cls.__dict__:
         val = cls.__dict__[var]
         if isinstance(val, types.FunctionType) and var.startswith('test'):
@@ -37,7 +37,7 @@ class Logic:
         self.name=name
         self.book_path = Path(os.path.abspath((inspect.stack()[1])[1]))
         self.func_path = Path(os.path.abspath(inspect.getfile(func)))
-        self.readme_path = self.book_path.parent.joinpath(readme).resolve()
+        self.readme_path = self.book_path.parent.joinpath(readme).resolve() if readme != None else None
         self.func=func
         self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
         self.tests=[]
@@ -67,7 +67,6 @@ class Logic:
         self.examples.append(Example(name, args))
 
     def add_test(self, name, cls):
-        print(cls.__name__)
         testnames = get_test_names(cls)
         for name in testnames:
             func = cls.__dict__[name]
@@ -112,6 +111,7 @@ class Test:
         self.status="unknown"
         self.code = inspect.getsource(func)
         self.result = None
+        self.latest_run_time = None
     
     def get_code(self):
         path = self.path
@@ -129,16 +129,16 @@ class Test:
             "code": self.code,
             "status": self.status,
             "result": self.result,
+            "latest_run_time": self.latest_run_time.isoformat(),
         }
 
     def run(self):
         command = ["python3", self.path, "{}.{}".format(self.cls_name, self.func.__name__)]
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout_data, stderr_data = proc.communicate()
-        print(proc.returncode, stdout_data, stderr_data)
         if proc.returncode == 0:
             self.status = "success"
-            self.result = stderr_data.decode('utf-8')
         else:
             self.status = "failure"
-            self.result = stderr_data.decode('utf-8')
+        self.result = stderr_data.decode('utf-8')
+        self.latest_run_time = datetime.now()

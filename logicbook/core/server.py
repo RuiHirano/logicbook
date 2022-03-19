@@ -28,7 +28,6 @@ app.manager = LogicManager()
 
 @app.on_event("startup")
 async def startup_event():
-    print("startup")
     # run ui
     ui_thread = threading.Thread(target=run_ui)
     ui_thread.start()
@@ -38,7 +37,6 @@ async def startup_event():
     # add logic
     logics_dir = project_dir.joinpath('logics').resolve()
     for file in logics_dir.glob('**/*_book.py'):
-        print(file.name, file.parent)
         sys.path.append(str(file.parent)) # TODO: remove pycache
         module_name = file.name.split('.')[0]
         module = importlib.import_module(module_name, file.parent)
@@ -55,7 +53,6 @@ class ExecuteLogicModel(BaseModel):
 
 @app.post("/execute/logic")
 async def execute_logic(data: ExecuteLogicModel):
-    print(data)
     result = None
     for logic in app.manager.logics:
         if logic.id == data.id:
@@ -76,14 +73,12 @@ async def execute_test(data: ExecuteTestModel):
 
 @app.get("/data")
 async def get_data():
-    print(len(app.manager.logics))
-    print([logic.name for logic in app.manager.logics])
     data = [logic.json() for logic in app.manager.logics]
-    print(data)
     return data
 
 def run_ui():
     proc = subprocess.run(["python3", "-m", "http.server", "7000", "--directory", "build"], cwd=str(core_dir.joinpath("../ui")))
+    print("You can view at http://localhost:7000")
 
 def run_watcher():
     target_dir = project_dir

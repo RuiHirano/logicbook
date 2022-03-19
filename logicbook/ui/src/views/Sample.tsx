@@ -20,8 +20,13 @@ export const Sample: React.FC = () => {
     const params = useParams<"name">();
     const logic_name = params.name
     const logic = logics.find(logic => logic.name === logic_name)
-
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (logics.length > 0) {
+            handleChangeLogic(logics[0])
+        }
+    }, [])
 
     const handleChangeLogic = (logic: any) => {
         navigate(`/${logic.name}`)
