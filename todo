@@ -13,7 +13,7 @@ TODOs 20220318:
 # beta release v0.1.0
 TODOs 20220319:
     ✔ same port for backend and frontend @done(22-03-19 16:20)
-    ☐ create documention
+    ✔ create documention @done(22-03-20 08:06)
     ✔ finish server only ctl+c @done(22-03-19 16:51)
     ✔ add pip requirement package @done(22-03-19 17:15)
     ✔ upgrade loading ui @done(22-03-19 16:35)
