@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
       description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-        <img src='img/example3.png' style={{ width: '100vh' }} />
+        <img src='img/example.png' style={{ width: '100vh' }} />
       </div>
       <main>
         <HomepageFeatures />
