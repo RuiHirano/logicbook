@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[461],{1856:function(o){o.exports=JSON.parse('{"allTagsPath":"/logicbook/blog/tags","slug":"/logicbook/blog/tags/hola","name":"hola","count":1,"permalink":"/logicbook/blog/tags/hola"}')}}]);
