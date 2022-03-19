@@ -15,7 +15,7 @@ TODOs 20220319:
     ✔ same port for backend and frontend @done(22-03-19 16:20)
     ☐ create documention
     ✔ finish server only ctl+c @done(22-03-19 16:51)
-    ☐ add pip requirement package
+    ✔ add pip requirement package @done(22-03-19 17:15)
     ✔ upgrade loading ui @done(22-03-19 16:35)
     ✔ get data during 1 sec @done(22-03-19 16:35)
     ☐ test on own project
