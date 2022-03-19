@@ -32,8 +32,8 @@ export default function Home(): JSX.Element {
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
       <HomepageHeader />
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 50 }}>
-        <img src='img/example2.png' style={{ width: '100vh' }} />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
+        <img src='img/example3.png' style={{ width: '100vh' }} />
       </div>
       <main>
         <HomepageFeatures />

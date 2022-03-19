@@ -44,4 +44,4 @@ logicbook start
 
 The `logicbook start` command builds your logicbook locally and serves it through a development server, ready for you to view at http://localhost:8000/.
 
-![Docs Version Dropdown](/img/example2.png)
+![Docs Version Dropdown](/img/example3.png)
