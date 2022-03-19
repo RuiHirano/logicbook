@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.middleware.cors import CORSMiddleware
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
@@ -23,14 +25,24 @@ app.add_middleware(
     allow_methods=["*"],      # 追記により追加
     allow_headers=["*"]       # 追記により追加
 )
+app.mount("/static", StaticFiles(directory=core_dir.joinpath("../ui/build/static").resolve()), name="static")
+templates = Jinja2Templates(directory=core_dir.joinpath("../ui/build").resolve())
+# index page
+@app.get("/")
+async def serve_ui(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+# logic page
+@app.get("/logics/{name}")
+async def serve_ui2(request: Request, name: str):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 app.manager = LogicManager()
 
 @app.on_event("startup")
 async def startup_event():
     # run ui
-    ui_thread = threading.Thread(target=run_ui)
-    ui_thread.start()
+    #ui_thread = threading.Thread(target=run_ui)
+    #ui_thread.start()
     # run watcher
     watcher_thread = threading.Thread(target=run_watcher)
     watcher_thread.start()

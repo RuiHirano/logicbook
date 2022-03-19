@@ -22,14 +22,14 @@ class Initializer:
 
     def create_config_dir(self):
         # create global .logicbook dir
-        source_dir_path = cli_path.joinpath('../templete/.logicbook').resolve()
+        source_dir_path = cli_path.joinpath('../template/.logicbook').resolve()
         target_dir_path = project_path.joinpath('.logicbook').resolve()
         print(color.green("creating .logicbook dir"))
         shutil.copytree(source_dir_path, target_dir_path)
 
     def create_logics_dir(self):
         # create logics dir
-        source_dir_path = cli_path.joinpath('../templete/logics').resolve()
+        source_dir_path = cli_path.joinpath('../template/logics').resolve()
         target_dir_path = project_path.joinpath('logics').resolve()
         print(color.green("creating logics dir"))
         shutil.copytree(source_dir_path, target_dir_path)

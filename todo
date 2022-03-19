@@ -8,4 +8,16 @@ TODOs 20220318:
  ✔ upper sort logic name @done(22-03-18 15:06)
  ✔ examples default values @done(22-03-18 23:12)
  ✔ yarn build @done(22-03-19 00:24)
- ☐ create package and test package (manifest.in templete)
+ ✔ create package and test package (manifest.in templete) @done(22-03-19 11:37)
+
+# beta release v0.1.0
+TODOs 20220319:
+    ✔ same port for backend and frontend @done(22-03-19 16:20)
+    ☐ create documention
+    ✔ upgrade loading ui @done(22-03-19 16:35)
+    ✔ get data during 1 sec @done(22-03-19 16:35)
+    ☐ test on own project
+    ☐ beta release v0.1.0 and publish documentation
+
+TODOs:
+    ☐ auto create logic argument description
