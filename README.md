@@ -3,21 +3,17 @@ Logicbook is an open source tool for building python logics in isolation. It str
 
 More document is [here](https://ruihirano.github.io/logicbook/).
 
-# Getting Started
+
+## Getting Started
 
 Get started by **creating a new logicbook**.
-
-## Install
-```bash
-pip install logicbook
-```
 
 ### What you'll need
 
 - [Python 3](https://www.python.org/downloads/) 
 - Pip
 
-## Generate a new site
+## Generate a new logicbook site
 
 Generate a new Logicbook site using the **logicbook command**.
 
@@ -30,7 +26,7 @@ You can type this command into Command Prompt, Powershell, Terminal, or any othe
 
 The command also installs all necessary dependencies you need to run Logicbook.
 
-## Start your site
+## Start your logicbook
 
 Run the development server:
 
@@ -41,4 +37,4 @@ logicbook start
 
 The `logicbook start` command builds your logicbook locally and serves it through a development server, ready for you to view at http://localhost:8000/.
 
-![Docs Version Dropdown](/img/example.png)
+![Docs Version Dropdown](https://github.com/RuiHirano/logicbook/blob/master/website/static/img/example.png)
