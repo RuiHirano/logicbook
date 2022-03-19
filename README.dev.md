@@ -24,7 +24,6 @@ $ pip install logicbook
 # Document by docusaurus
 https://qiita.com/futakuchi0117/items/4d3997c1ca1323259844
 ```
-sphinx-quickstart docs
-sphinx-apidoc -f -o ./docs .
-sphinx-build -b singlehtml ./docs ./docs/_build
+cd website
+yarn start --port 3333
 ```
