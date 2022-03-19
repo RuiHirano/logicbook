@@ -1,6 +1,8 @@
 # LogicBook
 Logicbook is an open source tool for building python logics in isolation. It streamlines logic development, testing, and documentation.
 
+More document is [here](https://ruihirano.github.io/logicbook/).
+
 # Getting Started
 
 Get started by **creating a new logicbook**.
