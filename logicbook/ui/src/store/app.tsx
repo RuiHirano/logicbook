@@ -53,8 +53,7 @@ export const AppProvider: React.FC<{}> = ({ children }) => {
 		let id: NodeJS.Timer
 		(async () => {
 			id = setInterval(async function () {
-				const backendAddr = "http://localhost:8000"
-				const api = new API(backendAddr)
+				const api = new API()
 				const data = await api.getData()
 				dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
 				setLoading(false)

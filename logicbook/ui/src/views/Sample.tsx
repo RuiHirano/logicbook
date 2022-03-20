@@ -11,16 +11,12 @@ import Footer from "../components/Footer";
 import InformationPanel from "../components/InformationPanel";
 import { AppStore } from "../store/app";
 import _ from 'lodash'
-import Loading from "../components/Loading";
-
-const backendAddr = "http://localhost:8000"
-const api = new API(backendAddr)
 
 export const Sample: React.FC = () => {
     const logics = useContext(AppStore).state.app.data
+    const api = new API()
     const params = useParams<"name">();
     const logic_name = params.name
-    console.log(logics, params, logic_name, logics.find)
     const logic = logics.find(logic => logic.name === logic_name)
     const navigate = useNavigate()
 
@@ -29,6 +25,8 @@ export const Sample: React.FC = () => {
             handleChangeLogic(logics[0])
         }
     }, [])
+
+
 
     const handleChangeLogic = (logic: any) => {
         navigate(`/logics/${logic.name}`)
@@ -54,7 +52,13 @@ export const Sample: React.FC = () => {
         <div>
             <SideBar logics={logics} onLogicClick={handleChangeLogic} />
             <Body>
-                {!logic && <Loading />}
+                {!logic &&
+                    <div style={{ height: '100vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+                        <div>
+                            <Typography style={{ textAlign: 'center', fontSize: 40, fontWeight: 'bold' }}>There are no logics.</Typography>
+                            <Typography style={{ textAlign: 'center', fontSize: 25 }}>Please add logics. If you help, please see the documentation.</Typography>
+                        </div>
+                    </div>}
                 {logic &&
                     <div>
                         <h1>{logic.name}</h1>

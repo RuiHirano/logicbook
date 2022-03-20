@@ -3,11 +3,9 @@ import axios from "axios"
 export default class API {
 
     private baseURL: string
-    //private jsonConverter: JsonConverter
 
-    constructor(url: string = 'http://localhost:5000') {
+    constructor(url: string = window.location.origin) {
         this.baseURL = url;
-        //this.jsonConverter = new JsonConverter()
     }
 
 

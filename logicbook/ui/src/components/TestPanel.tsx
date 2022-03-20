@@ -48,7 +48,6 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
     setLoadingAll(false)
   }
 
-  console.log(logic.tests)
   return (
     <div>
       <h2>Test</h2>

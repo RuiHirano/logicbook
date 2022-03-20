@@ -5,5 +5,5 @@ class Config(BaseModel):
     
 def get_config(config_path):
     with open(config_path, 'r') as yml:
-        config_yaml = yaml.load(yml)
+        config_yaml = yaml.safe_load(yml)
     return Config(**config_yaml)

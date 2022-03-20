@@ -1,2 +1,2 @@
-config:
-  path: ../src/**/*.logic.py
+project_name: Logicbook Example
+path: /

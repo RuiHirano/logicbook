@@ -16,9 +16,10 @@ def init():
     i.create()
 
 @cmd.command()
-def start():
+@click.option('--port', '-p', default=8000, help="port number")
+def start(port):
     runner = Runner()
-    runner.run_server()
+    runner.run_server(port)
 
 def main():
     cmd()

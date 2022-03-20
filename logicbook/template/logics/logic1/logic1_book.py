@@ -9,8 +9,6 @@ mylogic = Logic(
     readme="logic1.md",
 )
 
-# TODO: other name of mylogic
-#TODO add example by running logic
 mylogic.add_example(
     name="default", 
     args={

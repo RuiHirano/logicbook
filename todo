@@ -21,9 +21,21 @@ TODOs 20220319:
     ☐ test on own project
     ✔ beta release v0.1.0 and publish documentation @done(22-03-20 08:24)
 
+# 0.1.1
+TODOs:
+    ✔ enable select port --port=xxxx @done(22-03-20 11:11)
+    ✔ move logics directory to src/logics @done(22-03-20 13:06)
+    ✔ use logics directory path in config.json @done(22-03-20 13:10)
+    ✔ modify terminal logs @done(22-03-20 12:01)
+    ✔ add template in package @done(22-03-20 09:31)
+    ✔ add 'no record logics' if no logics on ui @done(22-03-20 09:10)
+    ✔ remove print on ui @done(22-03-20 11:14)
+    ✔ show error if .logicbook not found @done(22-03-20 09:37)
+    ✔ fix bag of add logic on backend @done(22-03-20 09:03)
+    ✔ change title ReactApp to Logicbook @done(22-03-20 08:37)
+
+    # 0.2.0
 TODOs:
     ☐ auto create logic argument description
-    ☐ enable select port --port=xxxx
-    ☐ move logics directory to src/logics
-    ☐ modify terminal logs
-    ☐ change title ReactApp to Logicbook
+    ☐ watchdog calld twice
+    ☐ open brawser in startup phase

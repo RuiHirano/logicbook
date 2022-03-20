@@ -10,14 +10,21 @@ import sys
 import time
 import threading
 from pydantic import BaseModel
-from manager import LogicManager, Logic
+from manager import LogicManager
+from logicbook import Logic  # This may be wrong
 import importlib
 from pathlib import Path
 import inspect
+from utils import Color
+from config import get_config
+
 core_dir = Path(os.path.dirname(__file__)).resolve()
 project_dir = Path(os.getcwd()).resolve()
+color = Color()
 
-app = FastAPI()
+app = FastAPI(
+    title="Logicbook",
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -40,14 +47,12 @@ app.manager = LogicManager()
 alive = True
 @app.on_event("startup")
 async def startup_event():
-    # run ui
-    #ui_thread = threading.Thread(target=run_ui)
-    #ui_thread.start()
     # run watcher
     watcher_thread = threading.Thread(target=run_watcher)
     watcher_thread.start()
     # add logic
-    logics_dir = project_dir.joinpath('logics').resolve()
+    config = get_config(project_dir.joinpath(".logicbook/config.yaml"))
+    logics_dir = project_dir.joinpath(config.path).joinpath('logics').resolve()
     for file in logics_dir.glob('**/*_book.py'):
         sys.path.append(str(file.parent)) # TODO: remove pycache
         module_name = file.name.split('.')[0]
@@ -56,10 +61,12 @@ async def startup_event():
         # add logic
         for name in dir(module):
             if isinstance(getattr(module, name), Logic):
+                color.blue(f"Loading {name} at {file.parent}")
                 app.manager.add_logic(getattr(module, name))
 
 @app.on_event("shutdown")
 def shutdown_event():
+    color.green(f"Stopping Logicbook server")
     global alive
     alive = False
 
@@ -92,10 +99,6 @@ async def get_data():
     data = [logic.json() for logic in app.manager.logics]
     return data
 
-def run_ui():
-    proc = subprocess.run(["python3", "-m", "http.server", "7000", "--directory", "build"], cwd=str(core_dir.joinpath("../ui")))
-    print("You can view at http://localhost:7000")
-
 def run_watcher():
     target_dir = project_dir
     event_handler = FileChangeHandler()
@@ -112,25 +115,23 @@ def run_watcher():
     observer.join()
 
 class FileChangeHandler(FileSystemEventHandler):
+
     def on_created(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
-        print('%s created' % filename)
+        #print('%s created' % filename)
 
     def on_modified(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
-        print('%s changed' % filename)
         for logic in app.manager.logics:
             # update logic if logic file is changed
             if str(logic.func_path) == filepath or str(logic.book_path) == filepath or str(logic.readme_path) == filepath:
-                print('update logic')
                 logic.update()
                 break
             # run test if test file is changed
             for test in logic.tests:
                 if str(test.path) == filepath:
-                    print("run test", filename)
                     test.run()
                     logic.update()
                     break
@@ -138,9 +139,9 @@ class FileChangeHandler(FileSystemEventHandler):
     def on_deleted(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
-        print('%s deleted' % filename)
+        #print('%s deleted' % filename)
 
     def on_moved(self, event):
         filepath = event.src_path
         filename = os.path.basename(filepath)
-        print('%s moved' % filename)
+        #print('%s moved' % filename)

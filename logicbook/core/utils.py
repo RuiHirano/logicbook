@@ -18,3 +18,4 @@ class Color:
 
     def blue(self, text):
         print(self.BLUE + text + self.END)
+
