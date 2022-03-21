@@ -1,17 +1,15 @@
-
-import requests
 from logic2 import join_string
-from manager import Logic
+from logicbook import Logic
 from test_logic2 import TestJoin
 
 mylogic = Logic(
     name="JoinString",
     func=join_string,
-    readme="logic2.md",
 )
 
 mylogic.add_example(
     name="default", 
+    func=join_string,
     args={
         "str1": "hello",
         "str2": "world",

@@ -6,14 +6,15 @@ from test_logic1 import TestSum
 sum_logic = SumLogic(1, 2)
 mylogic = Logic(
     name="SumLogic/Sum",
-    func=sum_logic.sum,
+    func=SumLogic(1, 2).sum,
     readme="logic1.md",
 )
 
 mylogic.add_example(
     name="default", 
+    func=SumLogic(1, 2).sum,
     args={
-        "a": 1,
-        "b": 2,
+        "c": 1,
     })
+
 mylogic.add_test(name="Test Class of Logic1", cls=TestSum)

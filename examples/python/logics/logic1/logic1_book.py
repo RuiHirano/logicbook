@@ -1,19 +1,20 @@
 
-import requests
-from logic1 import sum_logic
-from manager import Logic
+from logic1 import SumLogic
+from logicbook import Logic
 from test_logic1 import TestSum
 
+sum_logic = SumLogic(1, 2)
 mylogic = Logic(
-    name="Sum",
-    func=sum_logic,
+    name="SumLogic/Sum",
+    func=SumLogic(1, 2).sum,
     readme="logic1.md",
 )
 
 mylogic.add_example(
     name="default", 
+    func=SumLogic(1, 2).sum,
     args={
-        "a": 1,
-        "b": 2,
+        "c": 1,
     })
+
 mylogic.add_test(name="Test Class of Logic1", cls=TestSum)

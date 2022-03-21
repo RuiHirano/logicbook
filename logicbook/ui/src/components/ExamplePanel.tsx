@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Button, TextField, Typography, ButtonGroup } from '@mui/material'
 import _ from 'lodash'
+import { pink } from "@mui/material/colors";
 
 export interface Props {
   logic: any
@@ -11,13 +12,13 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
   const [targetLogic, setTargetLogic] = useState({ ...logic })
   const [examples, setExamples] = useState([...logic.examples])
   const [selectedIndex, setSelectedIndex] = useState(examples.length > 0 ? 0 : null)
-  const [output, setOutput] = useState(null)
+  const [output, setOutput] = useState(selectedIndex ? examples[selectedIndex].output : null)
 
   useEffect(() => {
     if (logic.id !== targetLogic.id) {
       setExamples([...logic.examples]);
       setTargetLogic({ ...logic });
-      setOutput(null);
+      setOutput(logic.examples.length > 0 ? [...logic.examples][0].output : null);
     }
   }, [logic])
 
@@ -30,7 +31,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
   }
 
   const handleExecute = async (index: number) => {
-    const data = { id: logic.id, args: examples[index].args }
+    const data = { id: examples[index].id, args: examples[index].args }
     const reuslt = await onExecute(data)
     setOutput(reuslt)
   }
@@ -52,7 +53,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
     if (type === 'string') {
       return string
     } else if (type === 'number') {
-      return parseFloat(string)
+      return string === "" ? 0 : parseFloat(string)
     } else if (type === 'boolean') {
       return string === 'true'
     } else if (type === 'object') {
@@ -98,7 +99,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
               <Button style={{ margin: 5 }} onClick={() => handleReset(selectedIndex)}>Reset</Button>
             </div>
             <h3>Output</h3>
-            <Typography>{output ? convertValueToString(output, typeof output) : ""}</Typography>
+            <Typography>{output}</Typography>
           </div>
         }
       </Paper>

@@ -21,8 +21,11 @@ def sum_logic(a, b):
     return a + b
 
 class TestSum(unittest.TestCase):
+    def setUp(self, a):
+        self.a = a
 
     def test_sum(self):
+        num = self.a
         actual = sum_logic(1, 2)
         self.assertEqual(3, actual)
 
@@ -46,7 +49,25 @@ for method in methods:
     print(TestSum.__dict__[method].__name__)
 
 print(hasattr(getLocalMethods, '__self__'))
-if getLocalMethods.__self__: 
-    print(getLocalMethods.__self__)
-ts = TestSum()
-print(ts.test_sum.__self__.__class__.__name__)
+
+def foo(a, b, c=4, *arglist, **keywords): pass
+
+class Test:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def test1(self):
+        return self.a + self.b
+
+tes = Test(1, 2)
+print(tes.__dict__, tes.test1())
+args = tes.__dict__
+tes2 = Test(**args)
+print(tes2.__dict__, tes2.test1())
+print(inspect.getfullargspec(tes.__init__))
+
+print(tes.test1)
+print(Test.test1)
+#test_sum = TestSum()
+#print(test_sum.test_sum())

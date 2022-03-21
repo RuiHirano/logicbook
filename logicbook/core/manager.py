@@ -25,6 +25,20 @@ class LogicManager:
                 return logic
         return None
 
+    def execute_example(self, id, args):
+        for logic in self.logics:
+            for example in logic.examples:
+                if example.id == id:
+                    return example.run(args)
+        return None
+
+    def execute_test(self, id):
+        for logic in self.logics:
+            for test in logic.tests:
+                if test.id == id:
+                    return test.run()
+        return None
+
 def get_test_names(cls):
     import types
     result = [ ]
@@ -50,7 +64,7 @@ class Logic:
         self.tests=[]
         self.examples = []
         self.code = inspect.getsource(func)
-        self.cls = self.check_cls(func)
+        self.cls, self.cls_args = self.check_cls(func)
 
     def check_cls(self, func):
         exist = False
@@ -58,12 +72,12 @@ class Logic:
         for name in dir(self.func_module):
             if name == func.__name__:
                 exist = True
-                return None
+                return None, None
         # check if func in class or not
         for name in dir(self.func_module):
             if hasattr(func, '__self__') and hasattr(func.__self__, '__class__') and name == func.__self__.__class__.__name__:
                 exist = True
-                return func.__self__.__class__
+                return func.__self__.__class__, func.__self__.__dict__
         if not exist:
             raise Exception(f"{func.__name__} is invalid function")
 
@@ -73,7 +87,7 @@ class Logic:
         for name in dir(self.func_module):
             if self.cls:
                 if name == self.cls.__name__:
-                    clas = getattr(self.func_module, name)()
+                    clas = getattr(self.func_module, name)(**self.cls_args)
                     self.func = getattr(clas, self.func.__name__)
             else:
                 if name == self.func.__name__:
@@ -98,8 +112,8 @@ class Logic:
             md = f.read()
         return md
 
-    def add_example(self, name, args):
-        self.examples.append(Example(name, args))
+    def add_example(self, name, func, args):
+        self.examples.append(Example(name, func, args))
 
     def add_test(self, name, cls):
         testnames = get_test_names(cls)
@@ -123,17 +137,24 @@ class Logic:
         }
 
 class Example:
-    def __init__(self, name, args):
+    def __init__(self, name, func, args):
         self.id = str(uuid.uuid4())
         self.name=name
+        self.func=func
         self.args=args
+        self.output=self.run(args)
 
     def json(self):
         return {
             "id": self.id,
             "name": self.name,
             "args": self.args,
+            "output": self.output,
         }
+
+    def run(self, args):
+        self.output = self.func(**args)
+        return self.output
 
 class Test:
     def __init__(self, name, cls, func):

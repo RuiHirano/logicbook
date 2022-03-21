@@ -85,17 +85,23 @@ async def execute_logic(data: ExecuteLogicModel):
             result = logic.func(**data.args)
     return result
 
+@app.post("/execute/example")
+async def execute_example(data: ExecuteLogicModel):
+    result = app.manager.execute_example(data.id, data.args)
+    return result
 
 class ExecuteTestModel(BaseModel):
     id: str
 
 @app.post("/execute/test")
 async def execute_test(data: ExecuteTestModel):
-    for logic in app.manager.logics:
+    result = app.manager.execute_test(data.id)
+    return result
+    '''for logic in app.manager.logics:
         for test in logic.tests:
             if test.id == data.id:
                 test.run()
-    return None
+    return None'''
 
 @app.get("/data")
 async def get_data():

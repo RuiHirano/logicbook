@@ -45,6 +45,11 @@ export const Sample: React.FC = () => {
         return result
     }
 
+    const handleExecuteExample = async (data: any) => {
+        const result = await api.executeExample(data)
+        return result
+    }
+
     const handleExecuteTest = async (test: any) => {
         const data = { id: test.id }
         const result = await api.executeTest(data)
@@ -74,7 +79,7 @@ export const Sample: React.FC = () => {
                         <MarkdownPanel logic={logic} />
                         <ExamplePanel
                             logic={logic}
-                            onExecute={handleExecute}
+                            onExecute={handleExecuteExample}
                         />
                         <TestPanel
                             logic={logic}

@@ -9,6 +9,7 @@ mylogic = Logic(
 
 mylogic.add_example(
     name="default", 
+    func=join_string,
     args={
         "str1": "hello",
         "str2": "world",

@@ -4,7 +4,7 @@ class SumLogic(object):
         self.a = a
         self.b = b
 
-    def sum(self):
-        return self.a + self.b
+    def sum(self, c):
+        return self.a + self.b + c
 
 
