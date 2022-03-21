@@ -4,6 +4,6 @@ This is logic1 description
 
 ### Usage
 ```
-result = sum(a, b)
-print(result)
+sum_logic = SumLogic(1, 2)
+result = sum_logic.sum()
 ```

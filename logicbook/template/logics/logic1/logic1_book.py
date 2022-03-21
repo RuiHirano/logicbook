@@ -1,11 +1,12 @@
 
-from logic1 import sum_logic
+from logic1 import SumLogic
 from logicbook import Logic
 from test_logic1 import TestSum
 
+sum_logic = SumLogic(1, 2)
 mylogic = Logic(
-    name="Sum",
-    func=sum_logic,
+    name="SumLogic/Sum",
+    func=sum_logic.sum,
     readme="logic1.md",
 )
 
