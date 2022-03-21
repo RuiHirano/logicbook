@@ -12,25 +12,30 @@ First, let’s create the sum logic and its accompanying book file: src/sum.py a
 ### 1. Create the sum logic file
 We’ll begin with a baseline implementation of the logic. We create src/sum.py and write below script:
 
-**src/sum.py**
+**src/calculator.py**
 ```python
-def sum(a, b):
-  return a + b
+class Calculator(object):
+    def __init__(self):
+        pass
+
+    def sum(self, a, b):
+        return a + b
 ```
-The above creates a function that takes a and b as inputs and calculates their sum.
+The above creates a class that takes a and b as inputs and calculates their sum.
 
 ### 2. Create the test file
 Below we create logic’s test using unittest library:
 
-**src/test_sum.py**
+**src/test_calculator.py**
 ```python
 import unittest
-from sum import sum
+from calculator import Calculator
 
-class TestSum(unittest.TestCase):
+class TestCalculator(unittest.TestCase):
 
     def test_sum(self):
-        actual = sum(1, 2)
+        calc = Calculator()
+        actual = calc.sum(1, 2)
         self.assertEqual(3, actual)
 
 if __name__ == '__main__':
@@ -39,15 +44,18 @@ if __name__ == '__main__':
 
 ### 3. Create the markdown file
 
+**src/logics/calculator_sum.md**
 ```md
-# Sum
+# Sum of calculator class
 
 This is sum description
 
 ### Usage
 ---
-from sum import sum
-result = sum(1, 2)
+from calculator import Calculator
+
+calc = Calculator()
+result = calc.sum(1, 2)
 print(result)  # 3
 ---
 ```
@@ -56,27 +64,27 @@ print(result)  # 3
 
 **src/logics/sum_book.py**
 ```python
-from sum import sum
+from calculator import Calculator
 from logicbook import Logic
-from test_sum import TestSum
+from test_calculator import TestCalculator
 
 mylogic = Logic(
-    name="Sum",
-    func=sum,
+    name="Calculator/Sum",
+    func=Calculator().sum,
     readme="sum.md",
 )
 
 mylogic.add_example(
     name="Default", 
-    func=sum,
+    func=Calculator().sum,
     args={
         "a": 1,
         "b": 2
     })
 
 mylogic.add_test(
-  name="Test Class of Sum", 
-  cls=TestSum
+  name="Test Class of Calculator", 
+  cls=TestCalculator
 )
 ```
 
@@ -91,10 +99,10 @@ There are two basic levels of organization in Logicbook: the logic and its child
 
 To tell Logicbook about the logic we are documenting, we enter logic arguments:
 
-```
+```python
 mylogic = Logic(
-    name="Sum",
-    func=sum,
+    name="Calculator/Sum",
+    func=Calculator().sum,
     readme="sum.md",
 )
 ```
@@ -107,10 +115,10 @@ mylogic = Logic(
 
 ** add_example Arguments **
 
-```
+```python
 mylogic.add_example(
     name="Default", 
-    func=sum,
+    func=Calculator().sum,
     args={
         "a": 1,
         "b": 2
@@ -125,10 +133,10 @@ mylogic.add_example(
 
 ** add_test Arguments **
 
-```
+```python
 mylogic.add_test(
-  name="Test Class of Sum", 
-  cls=TestSum
+  name="Test Class of Calculator", 
+  cls=TestCalculator
 )
 ```
 
@@ -137,6 +145,6 @@ mylogic.add_test(
 | name    | string |      name of example |
 | cls    | class |     the Testcase (class)|
 
-## 5. Run server and check the logic
+### 5. Run server and check the logic
 
 ![Docs Version Dropdown](/img/example.png)

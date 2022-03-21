@@ -39,6 +39,7 @@ if __name__ == '__main__':
 
 ### 3. Create the markdown file
 
+**src/logics/sum.md**
 ```md
 # Sum
 
@@ -91,7 +92,7 @@ There are two basic levels of organization in Logicbook: the logic and its child
 
 To tell Logicbook about the logic we are documenting, we enter logic arguments:
 
-```
+```python
 mylogic = Logic(
     name="Sum",
     func=sum,
@@ -107,7 +108,7 @@ mylogic = Logic(
 
 ** add_example Arguments **
 
-```
+```python
 mylogic.add_example(
     name="Default", 
     func=sum,
@@ -125,7 +126,7 @@ mylogic.add_example(
 
 ** add_test Arguments **
 
-```
+```python
 mylogic.add_test(
   name="Test Class of Sum", 
   cls=TestSum
@@ -137,6 +138,6 @@ mylogic.add_test(
 | name    | string |      name of example |
 | cls    | class |     the Testcase (class)|
 
-## 5. Run server and check the logic
+### 5. Run server and check the logic
 
 ![Docs Version Dropdown](/img/example.png)
