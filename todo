@@ -58,3 +58,5 @@ TODOs:
     ☐ open brawser in startup phase
     ☐ open brawser on same tab
     ☐ multiple test cases: tast_cases = []
+    ☐ loading ui on running test
+    ☐ add documentation of how to create 
