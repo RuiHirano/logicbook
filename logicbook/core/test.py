@@ -44,3 +44,9 @@ for method in methods:
     print(method)
     print(TestSum.__dict__[method])
     print(TestSum.__dict__[method].__name__)
+
+print(hasattr(getLocalMethods, '__self__'))
+if getLocalMethods.__self__: 
+    print(getLocalMethods.__self__)
+ts = TestSum()
+print(ts.test_sum.__self__.__class__.__name__)

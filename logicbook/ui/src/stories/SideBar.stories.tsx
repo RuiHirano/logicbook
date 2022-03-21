@@ -16,6 +16,9 @@ Default.args = {
   logics: [
     {
       name: "logic1",
+    },
+    {
+      name: "class1/logic1",
     }
   ],
   onLogicClick: () => { console.log("clicked") }

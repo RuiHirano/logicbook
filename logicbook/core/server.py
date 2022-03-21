@@ -62,7 +62,9 @@ async def startup_event():
         for name in dir(module):
             if isinstance(getattr(module, name), Logic):
                 color.blue(f"Loading {name} at {file.parent}")
-                app.manager.add_logic(getattr(module, name))
+                logic = getattr(module, name)
+                logic.module = module
+                app.manager.add_logic(logic)
 
 @app.on_event("shutdown")
 def shutdown_event():
@@ -79,6 +81,7 @@ async def execute_logic(data: ExecuteLogicModel):
     result = None
     for logic in app.manager.logics:
         if logic.id == data.id:
+            logic.reload()
             result = logic.func(**data.args)
     return result
 
@@ -114,6 +117,18 @@ def run_watcher():
     observer.stop()
     observer.join()
 
+
+class Time:
+    def __init__(self):
+        self.time = time.time()
+        self.lock = threading.Lock()
+
+    def set(self, _time):
+            self.lock.acquire() # 排他制御開始
+            self.time = _time
+            self.lock.release() # 排他制御解除
+
+app.time = Time()
 class FileChangeHandler(FileSystemEventHandler):
 
     def on_created(self, event):
@@ -122,19 +137,28 @@ class FileChangeHandler(FileSystemEventHandler):
         #print('%s created' % filename)
 
     def on_modified(self, event):
-        filepath = event.src_path
-        filename = os.path.basename(filepath)
-        for logic in app.manager.logics:
-            # update logic if logic file is changed
-            if str(logic.func_path) == filepath or str(logic.book_path) == filepath or str(logic.readme_path) == filepath:
-                logic.update()
-                break
-            # run test if test file is changed
-            for test in logic.tests:
-                if str(test.path) == filepath:
-                    test.run()
-                    logic.update()
-                    break
+        curren_time = time.time()
+        diff_time = curren_time - app.time.time
+        app.time.set(curren_time)
+        if diff_time < 0.1: # for fix called twice bug
+            filepath = event.src_path
+            filename = os.path.basename(filepath)
+
+            for logic in app.manager.logics:
+                # update logic if logic file is changed
+                if str(logic.func_path) == filepath or str(logic.book_path) == filepath or str(logic.readme_path) == filepath:
+                    if logic.is_changed():
+                        color.green("Update Logic: {} at {}".format(logic.func.__name__, filename))
+                        logic.update()
+                    continue
+                # run test if test file is changed
+                for test in logic.tests:
+                    if str(test.path) == filepath:
+                        if test.is_changed():
+                            color.green("Update Test: {} at {}".format(test.func.__name__, filename))
+                            test.run()
+                            test.update()
+                        continue
 
     def on_deleted(self, event):
         filepath = event.src_path

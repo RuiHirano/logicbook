@@ -6,6 +6,9 @@ import uuid
 from pathlib import Path
 import os
 import inspect
+import linecache
+import importlib
+
 core_dir = Path(os.path.dirname(__file__)).resolve()
 project_dir = Path(os.getcwd()).resolve()
 
@@ -36,13 +39,52 @@ class Logic:
         self.id = str(uuid.uuid4())
         self.name=name
         self.book_path = Path(os.path.abspath((inspect.stack()[1])[1]))
+        self.book_filename = str(self.book_path.name).split('.')[0]
+        self.book_module = importlib.import_module(self.book_filename, self.book_path.parent)
         self.func_path = Path(os.path.abspath(inspect.getfile(func)))
+        self.func_filename = str(self.func_path.name).split('.')[0]
+        self.func_module = importlib.import_module(self.func_filename, self.func_path.parent)
         self.readme_path = self.book_path.parent.joinpath(readme).resolve() if readme != None else None
         self.func=func
         self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
         self.tests=[]
         self.examples = []
         self.code = inspect.getsource(func)
+        self.cls = self.check_cls(func)
+
+    def check_cls(self, func):
+        exist = False
+        # check if func or not
+        for name in dir(self.func_module):
+            if name == func.__name__:
+                exist = True
+                return None
+        # check if func in class or not
+        for name in dir(self.func_module):
+            if hasattr(func, '__self__') and hasattr(func.__self__, '__class__') and name == func.__self__.__class__.__name__:
+                exist = True
+                return func.__self__.__class__
+        if not exist:
+            raise Exception(f"{func.__name__} is invalid function")
+
+    def reload(self):
+        self.func_module = importlib.reload(self.func_module)
+        self.book_module = importlib.reload(self.book_module)
+        for name in dir(self.func_module):
+            if self.cls:
+                if name == self.cls.__name__:
+                    clas = getattr(self.func_module, name)()
+                    self.func = getattr(clas, self.func.__name__)
+            else:
+                if name == self.func.__name__:
+                    self.func = getattr(self.func_module, name)
+
+    def is_changed(self):
+        self.reload()
+        func_str = inspect.getsource(self.func)
+        is_changed_func = self.code != func_str
+        is_changed_readme = self.readme != self.get_markdown(self.readme_path) if self.readme_path != None else None
+        return is_changed_func or is_changed_readme
 
     def update(self):
         self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
@@ -56,13 +98,6 @@ class Logic:
             md = f.read()
         return md
 
-    def get_code(self):
-        path = self.func_path
-        code = None
-        with open(path) as f:
-            code = f.read()
-        return code
-
     def add_example(self, name, args):
         self.examples.append(Example(name, args))
 
@@ -70,8 +105,7 @@ class Logic:
         testnames = get_test_names(cls)
         for name in testnames:
             func = cls.__dict__[name]
-            cls_name = cls.__name__
-            test = Test(name, cls_name, func)
+            test = Test(name, cls, func)
             test.run()
             self.tests.append(test)
 
@@ -102,38 +136,49 @@ class Example:
         }
 
 class Test:
-    def __init__(self, name, cls_name, func):
+    def __init__(self, name, cls, func):
         self.id = str(uuid.uuid4())
         self.name=name
-        self.cls_name=cls_name
+        self.cls=cls
         self.func=func
+        self.func_path = Path(os.path.abspath(inspect.getfile(func)))
+        self.func_filename = str(self.func_path.name).split('.')[0]
+        self.func_module = importlib.import_module(self.func_filename, self.func_path.parent)
         self.path = os.path.abspath(inspect.getfile(func))
         self.status="unknown"
         self.code = inspect.getsource(func)
         self.result = None
         self.latest_run_time = None
-    
-    def get_code(self):
-        path = self.path
-        code = None
-        with open(path) as f:
-            code = f.read()
-        return code
 
     def json(self):
         return {
             "id": self.id,
             "name": self.name,
-            "cls_name": self.cls_name,
+            "cls_name": self.cls.__name__,
             "path": self.path,
+            "func_path": str(self.func_path),
             "code": self.code,
             "status": self.status,
             "result": self.result,
             "latest_run_time": self.latest_run_time.isoformat(),
         }
 
+    def reload(self):
+        self.func_module = importlib.reload(self.func_module)
+        for name in dir(self.func_module):
+            if name == self.cls.__name__:
+                clas = getattr(self.func_module, name)()
+                self.func = getattr(clas, self.func.__name__)
+
+    def is_changed(self):
+        self.reload()
+        return self.code != inspect.getsource(self.func)
+
+    def update(self):
+        self.code = inspect.getsource(self.func)
+
     def run(self):
-        command = ["python3", self.path, "{}.{}".format(self.cls_name, self.func.__name__)]
+        command = ["python3", self.path, "{}.{}".format(self.cls.__name__, self.func.__name__)]
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout_data, stderr_data = proc.communicate()
         if proc.returncode == 0:

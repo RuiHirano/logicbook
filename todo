@@ -33,9 +33,23 @@ TODOs:
     ✔ show error if .logicbook not found @done(22-03-20 09:37)
     ✔ fix bag of add logic on backend @done(22-03-20 09:03)
     ✔ change title ReactApp to Logicbook @done(22-03-20 08:37)
+# 0.1.2
+TODOs:
+    ✔ update file and reload @done(22-03-20 17:39)
+    ✔ freeze when error occur in backend @done(22-03-20 18:48)
+    ✔ log level critical to error @done(22-03-20 18:48)
+    ✔ update test func content @done(22-03-20 17:37)
+    ✔ watchdog calld twice @done(22-03-20 21:04)
+    ✔ change tag title @done(22-03-20 23:04)
+    ✔ update when target function changed only [hotfix] @done(22-03-21 11:30)
+    ✔ get same function code when target function changed [hotfix] @done(22-03-21 11:30)
+    ✔ _create_job_args() missing 1 required positional argument: 'self' in execute [hotfix] @done(22-03-21 12:39)
+    ✔ add title in logic and show title accordion in ui @done(22-03-21 12:03)
 
-    # 0.2.0
+# 0.2.0
 TODOs:
     ☐ auto create logic argument description
-    ☐ watchdog calld twice
+    ☐ accodion open close logic
     ☐ open brawser in startup phase
+    ☐ open brawser on same tab
+    ☐ multiple test cases: tast_cases = []

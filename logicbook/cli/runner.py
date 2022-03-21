@@ -28,5 +28,5 @@ class Runner:
     def run_server(self, port):
         self.check_exist_config()
         color.green("Starting the logicbook server at http://localhost:{}".format(port))
-        webbrowser.open("http://localhost:{}".format(port))
-        uvicorn.run(app, host="0.0.0.0", port=port, log_level="critical")
+        #webbrowser.open("http://localhost:{}".format(port))
+        uvicorn.run(app, host="0.0.0.0", port=port, log_level="error")

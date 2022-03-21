@@ -12,11 +12,19 @@ import InformationPanel from "../components/InformationPanel";
 import { AppStore } from "../store/app";
 import _ from 'lodash'
 
+const convertSlashToUnderScore = (name: string) => {
+    return name.split("/").join("_")
+}
+
+const convertUnderScoreToSlash = (name: string) => {
+    return name.split("_").join("/")
+}
+
 export const Sample: React.FC = () => {
     const logics = useContext(AppStore).state.app.data
     const api = new API()
     const params = useParams<"name">();
-    const logic_name = params.name
+    const logic_name = params.name ? convertUnderScoreToSlash(params.name) : undefined
     const logic = logics.find(logic => logic.name === logic_name)
     const navigate = useNavigate()
 
@@ -29,7 +37,7 @@ export const Sample: React.FC = () => {
 
 
     const handleChangeLogic = (logic: any) => {
-        navigate(`/logics/${logic.name}`)
+        navigate(`/logics/${convertSlashToUnderScore(logic.name)}`)
     }
 
     const handleExecute = async (data: any) => {

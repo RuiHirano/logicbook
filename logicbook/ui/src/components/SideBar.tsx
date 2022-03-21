@@ -1,6 +1,7 @@
 import React from "react";
-import { Drawer, Box, List, ListItem, Divider, ListItemIcon, ListItemText } from '@mui/material'
+import { Drawer, Box, Typography, List, ListItem, Divider, ListItemIcon, ListItemText, Collapse, ListItemButton } from '@mui/material'
 import { Apps } from '@mui/icons-material';
+import BookmarkBorder from '@mui/icons-material/BookmarkBorder';
 
 export interface Props {
   logics: any[],
@@ -12,7 +13,6 @@ const SideBar: React.FC<Props> = ({ logics, onLogicClick }) => {
   const sortedLogics = logics.sort((a, b) => {
     return a.name.localeCompare(b.name)
   })
-
 
   const list = () => (
     <div style={{ width: 250 }}>
@@ -29,12 +29,43 @@ const SideBar: React.FC<Props> = ({ logics, onLogicClick }) => {
         <Divider />
         <List>
           {sortedLogics.map((logic, index) => (
-            <ListItem dense button key={logic.name} onClick={() => onLogicClick(logic)}>
-              <ListItemIcon>
-                <Apps />
-              </ListItemIcon>
-              <ListItemText primary={logic.name} />
-            </ListItem>
+            <div>
+              {logic.name.split("/").length === 1 &&
+                <ListItem dense button key={logic.name} onClick={() => onLogicClick(logic)}>
+                  <ListItemIcon>
+                    <Apps />
+                  </ListItemIcon>
+                  <ListItemText primary={logic.name.split("/")[0]} />
+                </ListItem>
+              }
+              {logic.name.split("/").length > 1 &&
+                <div>
+                  <ListItem dense button key={logic.name} onClick={() => onLogicClick(logic)}>
+                    <ListItemIcon>
+                      <Apps />
+                    </ListItemIcon>
+                    <ListItemText primary={logic.name.split("/")[0]} />
+                  </ListItem>
+                  {logic.name.split("/").map((name: string, index: number) => (
+                    <div>
+                      {index === 0 ? <div /> :
+                        <Collapse in={true} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding>
+                            <ListItem dense button key={name} sx={{ pl: 4 }} onClick={() => onLogicClick(logic)}>
+                              <ListItemIcon>
+                                <BookmarkBorder />
+                              </ListItemIcon>
+                              <ListItemText primary={name} />
+                            </ListItem>
+                          </List>
+                        </Collapse>
+                      }
+                    </div>
+                  ))}
+                </div>
+              }
+
+            </div>
           ))}
         </List>
       </Box>
