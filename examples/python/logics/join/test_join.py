@@ -4,8 +4,8 @@ from join import join
 class TestJoin(unittest.TestCase):
 
     def test_join(self):
-        actual = join(1, 2)
-        self.assertEqual(3, actual)
+        actual = join("Hello", "World")
+        self.assertEqual("HelloWorld", actual)
 
 if __name__ == '__main__':
     unittest.main()

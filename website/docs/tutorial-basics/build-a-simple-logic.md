@@ -30,8 +30,8 @@ from join import join
 class TestJoin(unittest.TestCase):
 
     def test_join(self):
-        actual = join(1, 2)
-        self.assertEqual(3, actual)
+        actual = join("Hello", "World")
+        self.assertEqual("HelloWorld", actual)
 
 if __name__ == '__main__':
     unittest.main()
@@ -48,8 +48,8 @@ This is join description
 ### Usage
 ---
 from join import join
-result = join(1, 2)
-print(result)  # 3
+result = join("Hello", "Logicbook")
+print(result)  # "HelloLogicbook
 ---
 ```
 
@@ -71,7 +71,7 @@ mylogic.add_example(
     name="Default", 
     func=join,
     args={
-        "a": "Hello",
+        "a": "Hello ",
         "b": "Logicbook!"
     }
 )
@@ -142,4 +142,4 @@ mylogic.add_test(
 
 ### 5. Run server and check the logic
 
-![Docs Version Dropdown](/img/example.png)
+![Docs Version Dropdown](/img/tutorial/example_join.png)
