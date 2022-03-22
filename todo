@@ -54,10 +54,14 @@ TODOs:
 # 0.2.0
 TODOs:
     ☐ auto create logic argument description
-    ☐ accodion open close logic
+    ☐ accodion open close logic on sidebar
     ☐ open brawser in startup phase
     ☐ open brawser on same tab
     ☐ multiple test cases: tast_cases = []
+<<<<<<< HEAD
     ☐ loading ui on running test
     ☐ add documentation of how to create 
     ☐ write qiita article in japanese 
+=======
+    ☐ put together same class on sidebar
+>>>>>>> develop

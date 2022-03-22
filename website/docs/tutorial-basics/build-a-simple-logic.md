@@ -5,33 +5,33 @@ sidebar_position: 1
 # Build a simple logic
 **Build a simple logic in isolation**
 
-## Simple Sum Logic
+## Simple Join Logic
 
-First, let’s create the sum logic and its accompanying book file: src/sum.py and src/logics/sum_book.py.
+First, let’s create the join logic and its accompanying book file: src/join.py and src/logics/join_book.py.
 
-### 1. Create the sum logic file
-We’ll begin with a baseline implementation of the logic. We create src/sum.py and write below script:
+### 1. Create the join logic file
+We’ll begin with a baseline implementation of the logic. We create src/join.py and write below script:
 
-**src/sum.py**
+**src/join.py**
 ```python
-def sum(a, b):
+def join(a: str, b: str):
   return a + b
 ```
-The above creates a function that takes a and b as inputs and calculates their sum.
+The above creates a function that takes a and b as inputs and calculates their join.
 
 ### 2. Create the test file
 Below we create logic’s test using unittest library:
 
-**src/test_sum.py**
+**src/test_join.py**
 ```python
 import unittest
-from sum import sum
+from join import join
 
-class TestSum(unittest.TestCase):
+class TestJoin(unittest.TestCase):
 
-    def test_sum(self):
-        actual = sum(1, 2)
-        self.assertEqual(3, actual)
+    def test_join(self):
+        actual = join("Hello", "World")
+        self.assertEqual("HelloWorld", actual)
 
 if __name__ == '__main__':
     unittest.main()
@@ -39,45 +39,46 @@ if __name__ == '__main__':
 
 ### 3. Create the markdown file
 
-**src/logics/sum.md**
+**src/logics/join.md**
 ```md
-# Sum
+# Join
 
-This is sum description
+This is join description
 
 ### Usage
 ---
-from sum import sum
-result = sum(1, 2)
-print(result)  # 3
+from join import join
+result = join("Hello", "Logicbook")
+print(result)  # "HelloLogicbook
 ---
 ```
 
 ### 4. Create the logicbook file
 
-**src/logics/sum_book.py**
+**src/logics/join_book.py**
 ```python
-from sum import sum
+from join import join
 from logicbook import Logic
-from test_sum import TestSum
+from test_join import TestJoin
 
 mylogic = Logic(
-    name="Sum",
-    func=sum,
-    readme="sum.md",
+    name="Join",
+    func=join,
+    readme="join.md",
 )
 
 mylogic.add_example(
     name="Default", 
-    func=sum,
+    func=join,
     args={
-        "a": 1,
-        "b": 2
-    })
+        "a": "Hello ",
+        "b": "Logicbook!"
+    }
+)
 
 mylogic.add_test(
-  name="Test Class of Sum", 
-  cls=TestSum
+  name="Test Class of Join", 
+  cls=TestJoin
 )
 ```
 
@@ -94,9 +95,9 @@ To tell Logicbook about the logic we are documenting, we enter logic arguments:
 
 ```python
 mylogic = Logic(
-    name="Sum",
-    func=sum,
-    readme="sum.md",
+    name="Join",
+    func=join,
+    readme="join.md",
 )
 ```
 
@@ -111,11 +112,12 @@ mylogic = Logic(
 ```python
 mylogic.add_example(
     name="Default", 
-    func=sum,
+    func=join,
     args={
-        "a": 1,
-        "b": 2
-    })
+        "a": "Hello",
+        "b": "Logicbook!"
+    }
+)
 ```
 
 | Argument   |     type      | description |
@@ -128,8 +130,8 @@ mylogic.add_example(
 
 ```python
 mylogic.add_test(
-  name="Test Class of Sum", 
-  cls=TestSum
+  name="Test Class of Join", 
+  cls=TestJoin
 )
 ```
 
@@ -140,4 +142,4 @@ mylogic.add_test(
 
 ### 5. Run server and check the logic
 
-![Docs Version Dropdown](/img/example.png)
+![Docs Version Dropdown](/img/tutorial/example_join.png)
