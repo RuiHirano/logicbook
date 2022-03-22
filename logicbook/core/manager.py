@@ -153,7 +153,10 @@ class Example:
         }
 
     def run(self, args):
-        self.output = self.func(**args)
+        try:
+            self.output = self.func(**args)
+        except Exception as e:
+            self.output = str(e)
         return self.output
 
 class Test:
