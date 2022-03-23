@@ -1,3 +1,4 @@
+from numpy import diff
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -63,7 +64,7 @@ async def startup_event():
             if isinstance(getattr(module, name), Logic):
                 color.blue(f"Loading {name} at {file.parent}")
                 logic = getattr(module, name)
-                logic.module = module
+                logic.add_book_logic_name(name)
                 app.manager.add_logic(logic)
 
 @app.on_event("shutdown")

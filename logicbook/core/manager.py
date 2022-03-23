@@ -55,6 +55,8 @@ class Logic:
         self.book_path = Path(os.path.abspath((inspect.stack()[1])[1]))
         self.book_filename = str(self.book_path.name).split('.')[0]
         self.book_module = importlib.import_module(self.book_filename, self.book_path.parent)
+        self.book_code = inspect.getsource(self.book_module)
+        #self.book_func = getattr(self.func_module, name)
         self.func_path = Path(os.path.abspath(inspect.getfile(func)))
         self.func_filename = str(self.func_path.name).split('.')[0]
         self.func_module = importlib.import_module(self.func_filename, self.func_path.parent)
@@ -65,6 +67,9 @@ class Logic:
         self.examples = []
         self.code = inspect.getsource(func)
         self.cls, self.cls_args = self.check_cls(func)
+
+    def add_book_logic_name(self, name):
+        self.book_logic_name = name
 
     def check_cls(self, func):
         exist = False
@@ -77,7 +82,11 @@ class Logic:
         for name in dir(self.func_module):
             if hasattr(func, '__self__') and hasattr(func.__self__, '__class__') and name == func.__self__.__class__.__name__:
                 exist = True
-                return func.__self__.__class__, func.__self__.__dict__
+                cls = func.__self__.__class__
+                args_names = inspect.getargspec(cls.__init__).args[1:]
+                self_dict = {k.strip('_'): v for k, v in func.__self__.__dict__.items()}
+                args = {k: v for k, v in self_dict.items() if k in args_names}
+                return cls, args
         if not exist:
             raise Exception(f"{func.__name__} is invalid function")
 
@@ -97,12 +106,14 @@ class Logic:
         self.reload()
         func_str = inspect.getsource(self.func)
         is_changed_func = self.code != func_str
+        is_changed_book = self.book_code != inspect.getsource(self.book_module) # TODO: check book
         is_changed_readme = self.readme != self.get_markdown(self.readme_path) if self.readme_path != None else None
-        return is_changed_func or is_changed_readme
+        return is_changed_func or is_changed_readme or is_changed_book
 
     def update(self):
         self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
         self.code = inspect.getsource(self.func)
+        self.book_code = inspect.getsource(self.book_module)
         for test in self.tests:
             test.run()
 
