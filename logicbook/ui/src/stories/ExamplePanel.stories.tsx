@@ -29,5 +29,5 @@ Default.args = {
       }
     }]
   },
-  onExecute: (args: any) => { console.log("executed", args); return Number(args.a) + Number(args.b); },
+  onExecute: (args: any) => { console.log("executed", args); },
 }

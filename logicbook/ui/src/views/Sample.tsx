@@ -34,15 +34,8 @@ export const Sample: React.FC = () => {
         }
     }, [])
 
-
-
     const handleChangeLogic = (logic: any) => {
         navigate(`/logics/${convertSlashToUnderScore(logic.name)}`)
-    }
-
-    const handleExecute = async (data: any) => {
-        const result = await api.executeLogic(data)
-        return result
     }
 
     const handleExecuteExample = async (data: any) => {

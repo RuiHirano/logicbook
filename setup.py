@@ -9,7 +9,7 @@ install_requires = [x.strip() for x in all_reqs]
 
 setup(
     name="logicbook",
-    version="0.1.3",
+    version="0.1.4",
     packages=["logicbook"],
     include_package_data=True,
     entry_points={

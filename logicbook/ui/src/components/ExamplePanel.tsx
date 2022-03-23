@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Button, TextField, Typography, ButtonGroup } from '@mui/material'
 import _ from 'lodash'
-import { pink } from "@mui/material/colors";
 
 export interface Props {
   logic: any
@@ -99,7 +98,7 @@ const ExamplePanel: React.FC<Props> = ({ logic, onExecute }) => {
               <Button style={{ margin: 5 }} onClick={() => handleReset(selectedIndex)}>Reset</Button>
             </div>
             <h3>Output</h3>
-            <Typography>{output}</Typography>
+            <Typography>{output ? convertValueToString(output, typeof output) : ""}</Typography>
           </div>
         }
       </Paper>

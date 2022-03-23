@@ -51,18 +51,25 @@ TODOs:
     ✔ error when self in function at manager.py #170 [hotfix] @done(22-03-21 17:40)
     TypeError: __init__() missing 2 required positional arguments: 'a' and 'b'
 
+# 0.1.4
+TODOs: 
+    ✔ apply exception throw in execute example @done(22-03-23 00:14)
+    ✔ not reload when change file @done(22-03-23 12:46)
+    ✔ true false is not shown to output @done(22-03-22 23:22)
+    ✔ open brawser in startup phase @done(22-03-22 19:32)
+    
+
 # 0.2.0
 TODOs:
     ☐ auto create logic argument description
-    ☐ accodion open close logic on sidebar
-    ☐ open brawser in startup phase
     ☐ open brawser on same tab
     ☐ multiple test cases: tast_cases = []
     ☐ loading ui on running test
-    ✔ add documentation of how to create @done(22-03-22 14:19)
-    ✔ write qiita article in japanese @done(22-03-22 14:19)
-    ☐ apply exception throw in execute example
-    ☐ not reload when change file
+    ☐ fix reload module delay
     ☐ reload logics when reload brawser
     ☐ put together same class on sidebar
-    ☐ true false is not shown to output
+    ☐ accodion open close logic on sidebar
+    ☐ update terminal ui using rich
+    ☐ error occur when changed test function name 
+    ✔ add documentation of how to create @done(22-03-22 14:19)
+    ✔ write qiita article in japanese @done(22-03-22 14:19)

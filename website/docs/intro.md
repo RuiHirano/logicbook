@@ -27,6 +27,8 @@ Generate a new Logicbook site using the **logicbook command**.
 ```bash
 cd your-python-project
 logicbook init
+# ProjectName: [YOUR_PROJECT_NAME] default is ""
+# Path: [PATH of Logics directory] default is /. (project root)
 ```
 
 You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.

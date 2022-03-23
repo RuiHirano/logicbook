@@ -78,7 +78,7 @@ mylogic.add_example(
 
 mylogic.add_test(
   name="Test Class of Join", 
-  cls=TestJoin
+  test_case=TestJoin
 )
 ```
 
@@ -131,7 +131,7 @@ mylogic.add_example(
 ```python
 mylogic.add_test(
   name="Test Class of Join", 
-  cls=TestJoin
+  test_case=TestJoin
 )
 ```
 

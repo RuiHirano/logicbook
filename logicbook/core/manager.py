@@ -51,7 +51,7 @@ def get_test_names(cls):
 class Logic:
     def __init__(self, name, func, readme=None) -> None:
         self.id = str(uuid.uuid4())
-        self.name=name
+        self.category, self.name= self.get_name_category(name)
         self.book_path = Path(os.path.abspath((inspect.stack()[1])[1]))
         self.book_filename = str(self.book_path.name).split('.')[0]
         self.book_module = importlib.import_module(self.book_filename, self.book_path.parent)
@@ -67,6 +67,13 @@ class Logic:
         self.examples = []
         self.code = inspect.getsource(func)
         self.cls, self.cls_args = self.check_cls(func)
+
+    def get_name_category(self, name):
+        split_name = name.split('/')
+        if len(split_name) == 1:
+            return None, name
+        else:
+            return split_name[0], split_name[1]
 
     def add_book_logic_name(self, name):
         self.book_logic_name = name
@@ -126,17 +133,18 @@ class Logic:
     def add_example(self, name, func, args):
         self.examples.append(Example(name, func, args))
 
-    def add_test(self, name, cls):
-        testnames = get_test_names(cls)
+    def add_test(self, name, test_case):
+        testnames = get_test_names(test_case)
         for name in testnames:
-            func = cls.__dict__[name]
-            test = Test(name, cls, func)
+            func = test_case.__dict__[name]
+            test = Test(name, test_case, func)
             test.run()
             self.tests.append(test)
 
     def json(self):
         return {
             "id": self.id,
+            "category": self.category,
             "name": self.name,
             "book_path": str(self.book_path),
             "func_path": str(self.func_path),
@@ -165,16 +173,16 @@ class Example:
 
     def run(self, args):
         try:
-            self.output = self.func(**args)
+            self.output = str(self.func(**args))
         except Exception as e:
             self.output = str(e)
         return self.output
 
 class Test:
-    def __init__(self, name, cls, func):
+    def __init__(self, name, test_case, func):
         self.id = str(uuid.uuid4())
         self.name=name
-        self.cls=cls
+        self.test_case=test_case
         self.func=func
         self.func_path = Path(os.path.abspath(inspect.getfile(func)))
         self.func_filename = str(self.func_path.name).split('.')[0]
@@ -189,7 +197,7 @@ class Test:
         return {
             "id": self.id,
             "name": self.name,
-            "cls_name": self.cls.__name__,
+            "test_case_name": self.test_case.__name__,
             "path": self.path,
             "func_path": str(self.func_path),
             "code": self.code,
@@ -201,7 +209,7 @@ class Test:
     def reload(self):
         self.func_module = importlib.reload(self.func_module)
         for name in dir(self.func_module):
-            if name == self.cls.__name__:
+            if name == self.test_case.__name__:
                 clas = getattr(self.func_module, name)()
                 self.func = getattr(clas, self.func.__name__)
 
@@ -213,7 +221,7 @@ class Test:
         self.code = inspect.getsource(self.func)
 
     def run(self):
-        command = ["python3", self.path, "{}.{}".format(self.cls.__name__, self.func.__name__)]
+        command = ["python3", self.path, "{}.{}".format(self.test_case.__name__, self.func.__name__)]
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout_data, stderr_data = proc.communicate()
         if proc.returncode == 0:

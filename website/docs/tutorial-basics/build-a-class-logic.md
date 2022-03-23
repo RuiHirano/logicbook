@@ -114,7 +114,7 @@ add.add_example(
 
 add.add_test(
   name="Test Class of Calculator", 
-  cls=TestCalculatorAdd
+  test_case=TestCalculatorAdd
 )
 
 sub = Logic(
@@ -133,7 +133,7 @@ sub.add_example(
 
 sub.add_test(
   name="Test Class of Calculator", 
-  cls=TestCalculatorSub
+  test_case=TestCalculatorSub
 )
 ```
 
@@ -178,7 +178,7 @@ add.add_example(
 ```python
 add.add_test(
   name="Test Class of Calculator", 
-  cls=TestCalculatorAdd
+  test_case=TestCalculatorAdd
 )
 ```
 
