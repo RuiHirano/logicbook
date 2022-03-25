@@ -71,3 +71,46 @@ print(tes.test1)
 print(Test.test1)
 #test_sum = TestSum()
 #print(test_sum.test_sum())
+
+def decorator_sample(tag_name):
+    def _decorator_sample(func):
+        def wrapper(*args, **kwargs):
+            print('--start--', tag_name)
+            func(*args, **kwargs)
+            print('--end--')
+        return wrapper
+    return _decorator_sample
+
+@decorator_sample('test')
+def test_decorator():
+    print("test_decorator")
+
+test_decorator()
+
+# クラスに当てる引数付きデコレータ
+def decorate_cls(exclude=[]):
+    def decorate(Cls):
+        for name, fn in inspect.getmembers(Cls):
+            if name.startswith('__'):
+                continue
+            if callable(getattr(Cls, name)) and not name in exclude:
+                #setattr(Cls, name, decorate_fn(name)(fn))
+                print(name)
+        return Cls
+
+    return decorate
+
+# デコレータを当てられるクラス
+@decorate_cls(exclude=['not_decorated'])
+class Test():
+    @classmethod
+    def decorated_classmethod(cls):
+        print('This is classmethod.')
+
+    def decorated_method(self):
+        print('This is decorated method.')
+
+    def not_decorated(self):
+        print('This is not decorated.')
+
+test = Test
