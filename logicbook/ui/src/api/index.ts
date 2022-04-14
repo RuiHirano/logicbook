@@ -4,7 +4,8 @@ export default class API {
 
     private baseURL: string
 
-    constructor(url: string = "http://0.0.0.0:1001") {
+    //TODO: change url
+    constructor(url: string = "http://0.0.0.0:8008") {
         this.baseURL = url;
     }
 
@@ -108,14 +109,6 @@ export default class API {
     async getData() {
         const res: any = await this.get({
             url: '/data'
-        });
-        const data = res.data
-        return data
-    }
-
-    async getData2() {
-        const res: any = await this.get({
-            url: '/data2'
         });
         const data = res.data
         return data

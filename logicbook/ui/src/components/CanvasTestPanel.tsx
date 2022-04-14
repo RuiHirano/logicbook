@@ -10,6 +10,7 @@ import TimeIcon from '@mui/icons-material/AccessTime';
 import LogTerminal from "./LogTerminal";
 import LoadingButton from '@mui/lab/LoadingButton';
 import moment from "moment";
+import _ from 'lodash'
 
 export async function timeout(ms: number) {
   await new Promise(resolve => setTimeout(resolve, ms));
@@ -23,15 +24,15 @@ export interface Props {
 }
 
 const CanvasTestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) => {
-  //logic.tests = []
-  const [open, setOpen] = React.useState(logic.tests.map(() => false));
-  const [loading, setLoading] = React.useState(logic.tests.map(() => false));
-  const [loadingAll, setLoadingAll] = React.useState(false);
 
-  console.log(logic.tests)
-  const handleClick = (index: number) => {
+  const [open, setOpen] = useState(logic.tests.map((test: any) => test.cases.map(() => { return false })));
+  const [loading, setLoading] = useState(logic.tests.map(() => false));
+  const [loadingAll, setLoadingAll] = useState(false);
+
+  console.log(logic.name, open, logic.tests, logic.tests.map((test: any) => test.cases.map(() => false)))
+  const handleClick = (i: number, j: number) => {
     const newOpen = [...open]
-    newOpen[index] = !newOpen[index]
+    newOpen[i][j] = !open[i][j]
     setOpen(newOpen)
   };
 
@@ -66,33 +67,32 @@ const CanvasTestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTe
               </ListItem>
               {test.cases.map((case_: any, j: number) => (
                 <div key={j}>
-                  <ListItemButton onClick={() => { }}>
+                  <ListItemButton onClick={() => handleClick(i, j)}>
                     <ListItemIcon>
                       {case_.status === null && <UnknownIcon style={{ color: "blue" }} />}
                       {case_.status === "success" && <SuccessIcon style={{ color: "green" }} />}
                       {case_.status === "failure" && <FailureIcon style={{ color: "red" }} />}
                     </ListItemIcon>
                     <ListItemText primary={case_.name} />
-                    {open[i] ? <ExpandLess /> : <ExpandMore />}
+                    {open[i][j] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
 
-                  <Collapse in={false} timeout="auto" unmountOnExit>
+                  <Collapse in={open[i][j]} timeout="auto" unmountOnExit>
                     <div style={{ display: "flex", justifyContent: "flex-end", marginRight: 40 }}>
                       <LoadingButton loading={loading[i]} onClick={() => handleExecuteTest(i)} variant="outlined" size="small" style={{ margin: 5 }}>Run Test</LoadingButton>
                     </div>
                     <div style={{ marginLeft: 40, marginRight: 40 }}>
                       <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Code</Typography>
                       <div style={{ height: 200 }}>
-                        <LogTerminal text={loading[i] ? "" : case_.source} loading={loading[i]} />
+                        <LogTerminal text={loading[i] ? " " : case_.source} loading={loading[i]} />
                       </div>
                     </div>
                     <div style={{ marginLeft: 40, marginRight: 40 }}>
                       <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Result</Typography>
                       <div style={{ height: 200 }}>
-                        <LogTerminal text={loading[i] ? "" : case_.result} loading={loading[i]} />
+                        <LogTerminal text={!loading[i] && case_.result ? case_.result : " "} loading={loading[i]} />
                       </div>
                     </div>
-                    <div style={{ marginBottom: 30 }} />
                   </Collapse>
                 </div>
               ))}

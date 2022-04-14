@@ -58,6 +58,10 @@ class Function:
             return ret
         return wrapper_f
 
+    def run_tests(self):
+        for test in self.tests:
+            test.run()
+            
     def json(self):
         return {
             "id": self.id,

@@ -1,21 +1,20 @@
 from server import api
 import uvicorn
+import webbrowser
 
 class App:
     def __init__(
         self,
         modules,
     ):
-        self.funcs = [func for module in modules for func in module.funcs.values()]
-        self.classes = [clas for module in modules for clas in module.classes.values()]
-        self.modules = modules
+        self.modules = {mod.id: mod for mod in modules}
 
         self.include_funcs_in_class()
         self.api = api
         self.api.app = self
 
     def include_funcs_in_class(self):
-        for module in self.modules:
+        for module in self.modules.values():
             new_funcs = {}
             for func in module.funcs.values():
                 print(func)
@@ -27,18 +26,21 @@ class App:
                         new_funcs[func.id] = func
             module.funcs = new_funcs
 
-    def run(self, host="localhost", port=1001):
-        uvicorn.run(self.api, host=host, port=port)
+    def run(self, host="localhost", port=8008):
+        webbrowser.open("http://localhost:{}".format(port))
+        uvicorn.run(self.api, host=host, port=port, log_level="error")
 
+    def execute_test(self, test_id):
+        for module in self.modules:
+            for clas in module.classes:
+                for func in clas.funcs.values():
+                    for test in func.tests:
+                        if test.id == test_id:
+                            test.run()
+    
     def json(self):
         return {
-            "funcs": [func.json() for func in self.funcs],
-            "classes": [clas.json() for clas in self.classes],
-        }
-    
-    def json2(self):
-        return {
-            "modules": [mod.json() for mod in self.modules],
+            "modules": [mod.json() for mod in self.modules.values()],
         }
 
 if __name__ == "__main__":

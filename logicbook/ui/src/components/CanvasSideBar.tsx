@@ -23,8 +23,6 @@ export interface Props {
 const CanvasSideBar: React.FC<Props> = ({ logic, open, onClickClose }) => {
 
   const [drawerWidth, setDrawerWidth] = useState<"30vw" | "50vw" | "85vw">("85vw")
-  const lineNum = logic.source.split("\n").length
-  console.log(lineNum)
 
   return (
     <div style={{ width: drawerWidth }}>
@@ -35,12 +33,18 @@ const CanvasSideBar: React.FC<Props> = ({ logic, open, onClickClose }) => {
         onClose={() => { }}
       >
         <div style={{ width: drawerWidth }}>
-          <div style={{ display: 'flex', margin: 10 }}>
-            <Typography style={{ fontWeight: 'bold', fontSize: 30 }}>{logic.name}</Typography>
-            {/*<Chip style={{ marginLeft: 20, margin: 10, backgroundColor: "deepskyblue" }} size="small" label={logic.version} />*/}
+          {!logic &&
+            <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+              <Typography style={{ fontWeight: "bold", fontSize: 30 }}>No records</Typography>
+            </div>}
+          {logic &&
+            <div>
+              <div style={{ display: 'flex', margin: 10 }}>
+                <Typography style={{ fontWeight: 'bold', fontSize: 30 }}>{logic.name}</Typography>
+                {/*<Chip style={{ marginLeft: 20, margin: 10, backgroundColor: "deepskyblue" }} size="small" label={logic.version} />*/}
 
-            <div style={{ margin: '0 0 0 auto' }}>
-              {/*{drawerWidth === "30vw" &&
+                <div style={{ margin: '0 0 0 auto' }}>
+                  {/*{drawerWidth === "30vw" &&
                 <IconButton onClick={() => setDrawerWidth('50vw')}>
                   <ArrowLeft />
                 </IconButton>}
@@ -52,26 +56,28 @@ const CanvasSideBar: React.FC<Props> = ({ logic, open, onClickClose }) => {
                 <IconButton onClick={() => setDrawerWidth("30vw")}>
                   <ArrowRight />
   </IconButton>}*/}
-              <IconButton style={{ marginLeft: 10 }} onClick={onClickClose}>
-                <Close />
-              </IconButton>
+                  <IconButton style={{ marginLeft: 10 }} onClick={onClickClose}>
+                    <Close />
+                  </IconButton>
+                </div>
+              </div>
+              <div style={{ margin: 10 }}>
+                <CanvasInformationPanel logic={logic} />
+              </div>
+              <div style={{ margin: 10 }}>
+                <h2>Code</h2>
+                <div style={{ height: logic.source.split("\n").length * 20 }}>
+                  {logic.source && <LazyLog height="auto" selectableLines text={logic.source} style={{ borderRadius: 10, paddingTop: 10, paddingBottom: 10 }} />}
+                </div>
+              </div>
+              <div style={{ margin: 10 }}>
+                <CanvasMarkdownPanel logic={logic} />
+              </div>
+              <div style={{ margin: 10 }}>
+                <CanvasTestPanel logic={logic} onExecuteAllTest={() => { }} onExecuteTest={() => { }} />
+              </div>
             </div>
-          </div>
-          <div style={{ margin: 10 }}>
-            <CanvasInformationPanel logic={logic} />
-          </div>
-          <div style={{ margin: 10 }}>
-            <h2>Code</h2>
-            <div style={{ height: lineNum * 20 }}>
-              {logic.source && <LazyLog height="auto" selectableLines text={logic.source} style={{ borderRadius: 10, paddingTop: 10, paddingBottom: 10 }} />}
-            </div>
-          </div>
-          <div style={{ margin: 10 }}>
-            <CanvasMarkdownPanel logic={logic} />
-          </div>
-          <div style={{ margin: 10 }}>
-            <CanvasTestPanel logic={logic} onExecuteAllTest={() => { }} onExecuteTest={() => { }} />
-          </div>
+          }
         </div>
       </Drawer>
     </div>

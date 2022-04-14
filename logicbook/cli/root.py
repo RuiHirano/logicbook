@@ -11,13 +11,18 @@ def cmd():
     pass
 
 @cmd.command()
+def test():
+    i = Initializer()
+    i.create()
+
+@cmd.command()
 def init():
     i = Initializer()
     i.create()
 
 @cmd.command()
-@click.option('--port', '-p', default=1001, help="port number")
-def start(port, dev):
+@click.option('--port', '-p', default=8008, help="port number")
+def start(port):
     runner = Runner()
     runner.run_server(port)
 

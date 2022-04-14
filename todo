@@ -76,3 +76,10 @@ TODOs:
     ☐ add output wrapper function: ex. show pipeline.json()
     ✔ add documentation of how to create @done(22-03-22 14:19)
     ✔ write qiita article in japanese @done(22-03-22 14:19)
+
+# 1.0.0-beta.0
+TODOs:
+    ☐ save readme at local directory
+    ✔ show test source code @done(22-03-30 18:02)
+    ☐ run test on gui
+    ☐ big refactoring for beta release

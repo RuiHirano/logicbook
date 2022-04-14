@@ -10,7 +10,6 @@ import Loading from '../components/Loading';
 
 export interface App {
 	data: any
-	data2: any
 }
 
 export type AppActionType = "UPDATE_APP"
@@ -30,7 +29,6 @@ type AppState = typeof initialState
 const initialState = {
 	app: {
 		data: [],
-		data2: [],
 	} as App,
 }
 
@@ -57,8 +55,7 @@ export const AppProvider: React.FC<{}> = ({ children }) => {
 			id = setInterval(async function () {
 				const api = new API()
 				const data = await api.getData()
-				const data2 = await api.getData2()
-				dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data, data2: data2 } as App })
+				dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
 				setLoading(false)
 			}, 1000);
 		})()

@@ -1,14 +1,14 @@
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '../core'))
-print(sys.path)
 from pathlib import Path
+sys.path.append(str(Path(os.path.dirname(__file__)).joinpath('../core').resolve()))
 from .utils import Color
 from ..core.app import App
 import importlib
 
 color = Color()
 project_path = Path(os.getcwd()).resolve()
+sys.path.append(str(project_path.joinpath('.logicbook').resolve()))
 class Runner:
     def __init__(self):
         pass
@@ -27,9 +27,13 @@ class Runner:
 
     def run_server(self, port):
         self.check_exist_logicbook()
-        module = importlib.import_module("app", project_path)
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("app", project_path.joinpath(".logicbook/app.py"))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        
         color.green("Starting the logicbook server at http://localhost:{}".format(port))
         for name in dir(module):
             if isinstance(getattr(module, name), App):
                 app = getattr(module, name)
-                app.run(port=port)
+                app.run(host="localhost", port=port)

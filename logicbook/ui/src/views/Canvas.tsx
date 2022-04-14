@@ -11,24 +11,11 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import CanvasSideMenuBar from "../components/CanvasSideMenuBar";
 import MainAppBar from "../components/MainAppBar";
 
-const convertSlashToUnderScore = (name: string) => {
-    return name.split("/").join("_")
-}
-
-const convertUnderScoreToSlash = (name: string) => {
-    return name.split("_").join("/")
-}
-
 const Canvas: React.FC = () => {
     const data: any = useContext(AppStore).state.app.data
-    const data2: any = useContext(AppStore).state.app.data2
-    console.log(data2)
-    const sortedFuncs = data.funcs.sort((a: any, b: any) => {
-        return a.name.localeCompare(b.name)
-    })
-    const [logic, setLogic] = useState(data.funcs[0])
+    const [logic, setLogic] = useState(null)
     const [open, setOpen] = useState(true)
-    const [disabledPan, setDisabledPan] = useState(false)
+    console.log(data)
 
     const handleChangeLogic = (logic: any) => {
         setLogic(logic)
@@ -42,7 +29,7 @@ const Canvas: React.FC = () => {
         <div>
             <MainAppBar onClickMenu={handleToggleSideBar} />
             <CanvasSideMenuBar
-                data={data2}
+                data={data}
                 onClickLogic={handleChangeLogic}
             />
             <CanvasSideBar

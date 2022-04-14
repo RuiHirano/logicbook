@@ -19,8 +19,8 @@ api.add_middleware(
 )
 
 core_dir = Path(os.path.dirname(__file__)).resolve()
-api.mount("/static", StaticFiles(directory=core_dir.joinpath("../ui2/build/static").resolve()), name="static")
-templates = Jinja2Templates(directory=core_dir.joinpath("../ui2/build").resolve())
+api.mount("/static", StaticFiles(directory=core_dir.joinpath("../ui/build/static").resolve()), name="static")
+templates = Jinja2Templates(directory=core_dir.joinpath("../ui/build").resolve())
 
 # index page
 @api.get("/")
@@ -31,16 +31,19 @@ async def serve_ui(request: Request):
 @api.get("/logics/{name}")
 async def serve_ui2(request: Request, name: str):
     return templates.TemplateResponse("index.html", {"request": request})
-
+    
 @api.get("/data")
 async def get_data():
     data = api.app.json()
     return data
 
-@api.get("/data2")
-async def get_data2():
-    data = api.app.json2()
-    return data
+class ExecuteTestModel(BaseModel):
+    test_id: str
+
+@api.post("/execute/test")
+async def execute_test(data: ExecuteTestModel):
+    result = api.app.execute_test(data.test_id)
+    return result
 
 @api.on_event("startup")
 async def startup_event():
@@ -99,4 +102,4 @@ def shutdown_event():
     print("shutdown")
     
 if __name__ == "__main__":
-    uvicorn.run(api, host="0.0.0.0", port=1001)
+    uvicorn.run(api, host="0.0.0.0", port=8008)

@@ -2,9 +2,11 @@ from function import Function
 from clas import Class
 from pathlib import Path
 import inspect
+import uuid
 
 class Logicbook:
     def __init__(self):
+        self.id = str(uuid.uuid4())
         self.path = Path(inspect.stack()[1][1]).resolve()
         self.name = self.path.name.split('.')[0]
         self.funcs = {}
@@ -38,6 +40,7 @@ class Logicbook:
 
     def json(self):
         return {
+            "id": self.id,
             "funcs": [
                 func.json() for func in self.funcs.values()
             ],
