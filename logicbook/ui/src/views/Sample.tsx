@@ -6,7 +6,7 @@ import { TextField, Typography, Button, Paper, Theme, styled } from '@mui/materi
 import SideBar from "../components/SideBar";
 import ExamplePanel from "../components/ExamplePanel";
 import TestPanel from "../components/TestPanel";
-import MarkdownPanel from "../components/MarkdownPanel";
+import DocumentPanel from "../components/DocumentPanel";
 import Footer from "../components/Footer";
 import InformationPanel from "../components/InformationPanel";
 import { AppStore } from "../store/app";
@@ -54,6 +54,12 @@ export const Sample: React.FC = () => {
         }
     }
 
+    const handleUpdateDocument = async (text: string) => {
+        console.log("update document")
+        const data = { id: logic.id, text: text }
+        const result = await api.updateDocument(data)
+    }
+
     return (
         <div>
             <SideBar logics={logics} onLogicClick={handleChangeLogic} />
@@ -69,20 +75,20 @@ export const Sample: React.FC = () => {
                     <div>
                         <h1>{logic.name}</h1>
                         <InformationPanel logic={logic} />
-                        <MarkdownPanel logic={logic} />
+                        <DocumentPanel logic={logic} onSave={handleUpdateDocument} />
                         <ExamplePanel
                             logic={logic}
                             onExecute={handleExecuteExample}
                         />
+                        <h2>Code</h2>
+                        <div style={{}}>
+                            {logic.code && <LogTerminal text={logic.code} loading={false} />}
+                        </div>
                         <TestPanel
                             logic={logic}
                             onExecuteTest={(test: any) => { handleExecuteTest(test) }}
                             onExecuteAllTest={() => handleExecuteAllTest(logic)}
                         />
-                        <h2>Code</h2>
-                        <div style={{ height: 300 }}>
-                            {logic.code && <LogTerminal text={logic.code} loading={false} />}
-                        </div>
                         <div style={{ height: 200 }} />
                     </div>
                 }

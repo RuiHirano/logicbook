@@ -24,7 +24,6 @@ add.add_test(
 sub = Logic(
     name="Calculator/Sub",
     func=Calculator().sub,
-    readme="calculator_sub.md",
 )
 
 sub.add_example(

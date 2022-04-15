@@ -60,9 +60,12 @@ class Logic:
         self.func_path = Path(os.path.abspath(inspect.getfile(func)))
         self.func_filename = str(self.func_path.name).split('.')[0]
         self.func_module = importlib.import_module(self.func_filename, self.func_path.parent)
-        self.readme_path = self.book_path.parent.joinpath(readme).resolve() if readme != None else None
         self.func=func
-        self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
+        self.func_name = func.__name__
+        self.relative_func_path = str(self.func_path).replace(str(project_dir), "")
+        print(str(self.func_path), str(project_dir), self.relative_func_path)
+        self.document_path = self.book_path.parent.joinpath(readme).resolve() if readme != None else None
+        self.document = Document(self.document_path)
         self.tests=[]
         self.examples = []
         self.code = inspect.getsource(func)
@@ -114,30 +117,25 @@ class Logic:
         func_str = inspect.getsource(self.func)
         is_changed_func = self.code != func_str
         is_changed_book = self.book_code != inspect.getsource(self.book_module) # TODO: check book
-        is_changed_readme = self.readme != self.get_markdown(self.readme_path) if self.readme_path != None else None
-        return is_changed_func or is_changed_readme or is_changed_book
+        #is_changed_readme = self.readme != self.get_document(self.readme_path) if self.readme_path != None else None
+        return is_changed_func or is_changed_book
 
     def update(self):
-        self.readme = self.get_markdown(self.readme_path) if self.readme_path != None else None
+        #self.readme = self.get_document(self.readme_path) if self.readme_path != None else None
         self.code = inspect.getsource(self.func)
         self.book_code = inspect.getsource(self.book_module)
         for test in self.tests:
             test.run()
 
-    def get_markdown(self, path):
-        md = None
-        with open(path) as f:
-            md = f.read()
-        return md
-
     def add_example(self, name, func, args):
         self.examples.append(Example(name, func, args))
 
     def add_test(self, name, test_case):
+        title = name
         testnames = get_test_names(test_case)
         for name in testnames:
             func = test_case.__dict__[name]
-            test = Test(name, test_case, func)
+            test = Test(title, name, test_case, func)
             test.run()
             self.tests.append(test)
 
@@ -148,11 +146,39 @@ class Logic:
             "name": self.name,
             "book_path": str(self.book_path),
             "func_path": str(self.func_path),
-            "readme_path": str(self.readme_path),
-            "readme": self.readme,
+            "func_name": self.func_name,
+            "relative_func_path": str(self.relative_func_path),
+            "document": self.document.json(),
             "tests": [test.json() for test in self.tests],
             "examples": [ex.json() for ex in self.examples],
             "code": self.code,
+            "class_name": self.cls.__name__ if self.cls != None else None,
+        }
+
+class Document:
+    def __init__(self, path):
+        print("Document path:", path)
+        self.path = path
+        self.text = self.get_document(path)
+
+    def get_document(self, path):
+        if path == None:
+            return ""
+        md = None
+        with open(path) as f:
+            md = f.read()
+        return md
+
+    def update(self, new_text):
+        if self.path != None:
+            self.text = new_text
+            with open(self.path, 'w') as f:
+                f.write(new_text)
+
+    def json(self):
+        return {
+            "path": self.path,
+            "text": self.text,
         }
 
 class Example:
@@ -161,7 +187,26 @@ class Example:
         self.name=name
         self.func=func
         self.args=args
+        self.signature = inspect.signature(func)
+        self.error=self.check_args_type(args)
         self.output=self.run(args)
+
+    def get_signature_json(self):
+        json = {}
+        for k,v in self.signature.parameters.items():
+            json[k] = v.annotation.__name__
+        return json
+
+    def check_args_type(self, args):
+        for arg, value in args.items():
+            if not arg in list(self.signature.parameters.keys()):
+                print(f"Argument {arg} is not exist in {self.func.__name__}")
+                return f"Argument {arg} is not exist in {self.func.__name__}"
+            annotation = self.signature.parameters[arg].annotation
+            if not isinstance(value, annotation) and annotation != inspect._empty:
+                print(f"Argument {arg} is not {self.signature.parameters[arg].annotation} on {self.func.__name__}")
+                return f"Argument {arg} is not {self.signature.parameters[arg].annotation} on {self.func.__name__}"
+        return None
 
     def json(self):
         return {
@@ -169,9 +214,13 @@ class Example:
             "name": self.name,
             "args": self.args,
             "output": self.output,
+            "error": self.error,
+            "signature": self.get_signature_json(),
         }
 
     def run(self, args):
+        if self.error:
+            return ""
         try:
             self.output = str(self.func(**args))
         except Exception as e:
@@ -179,8 +228,9 @@ class Example:
         return self.output
 
 class Test:
-    def __init__(self, name, test_case, func):
+    def __init__(self, title, name, test_case, func):
         self.id = str(uuid.uuid4())
+        self.title = title
         self.name=name
         self.test_case=test_case
         self.func=func
@@ -196,6 +246,7 @@ class Test:
     def json(self):
         return {
             "id": self.id,
+            "title": self.title,
             "name": self.name,
             "test_case_name": self.test_case.__name__,
             "path": self.path,

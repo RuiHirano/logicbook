@@ -57,9 +57,9 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
           aria-labelledby="nested-list-subheader"
           subheader={
             <ListSubheader component="div" id="nested-list-subheader">
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {/*} <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <LoadingButton loading={loadingAll} onClick={handleExecuteAllTest} variant="outlined" size="small" style={{ margin: 5 }} disabled={logic.tests.length === 0}>Run all</LoadingButton>
-              </div>
+          </div>*/}
             </ListSubheader>
           }
         >
@@ -72,7 +72,7 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
                   {test.status === "failure" && <FailureIcon style={{ color: "red" }} />}
                   {test.status === "unknown" && <UnknownIcon style={{ color: "blue" }} />}
                 </ListItemIcon>
-                <ListItemText primary={test.name} />
+                <ListItemText primary={test.name} secondary={test.title} />
                 {open[i] ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse in={open[i]} timeout="auto" unmountOnExit>
@@ -90,18 +90,18 @@ const TestPanel: React.FC<Props> = ({ logic, onExecuteTest, onExecuteAllTest }) 
                     <ListItemText primary={moment(test.latest_run_time).format("YYYY/MM/DD HH:mm:ss")} />
                   </ListItem>
                 </List>
-                <div style={{ display: "flex", justifyContent: "flex-end", marginRight: 40 }}>
+                {/*<div style={{ display: "flex", justifyContent: "flex-end", marginRight: 40 }}>
                   <LoadingButton loading={loading[i]} onClick={() => handleExecuteTest(i)} variant="outlined" size="small" style={{ margin: 5 }}>Run Test</LoadingButton>
-                </div>
+          </div>*/}
                 <div style={{ marginLeft: 40, marginRight: 40 }}>
                   <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Code</Typography>
-                  <div style={{ height: 200 }}>
+                  <div style={{}}>
                     <LogTerminal text={loading[i] ? "" : test.code} loading={loading[i]} />
                   </div>
                 </div>
                 <div style={{ marginLeft: 40, marginRight: 40 }}>
                   <Typography style={{ margin: 5, fontWeight: 'bold' }} variant="body1">Result</Typography>
-                  <div style={{ height: 200 }}>
+                  <div style={{}}>
                     <LogTerminal text={loading[i] ? "" : test.result} loading={loading[i]} />
                   </div>
                 </div>

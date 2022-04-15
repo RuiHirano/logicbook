@@ -1,3 +1,4 @@
+from tracemalloc import start
 from numpy import diff
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
@@ -46,12 +47,14 @@ async def serve_ui2(request: Request, name: str):
 
 app.manager = LogicManager()
 alive = True
-@app.on_event("startup")
-async def startup_event():
+
+def startup():
     # run watcher
-    watcher_thread = threading.Thread(target=run_watcher)
-    watcher_thread.start()
+    #watcher_thread = threading.Thread(target=run_watcher)
+    #watcher_thread.start()
     # add logic
+    print("Loading logic...")
+    app.manager = LogicManager()
     config = get_config(project_dir.joinpath(".logicbook/config.yaml"))
     logics_dir = project_dir.joinpath(config.path).joinpath('logics').resolve()
     for file in logics_dir.glob('**/*_book.py'):
@@ -67,11 +70,33 @@ async def startup_event():
                 logic.add_book_logic_name(name)
                 app.manager.add_logic(logic)
 
+@app.on_event("startup")
+async def startup_event():
+    startup()
+
 @app.on_event("shutdown")
 def shutdown_event():
     color.green(f"Stopping Logicbook server")
     global alive
     alive = False
+
+@app.post("/reload")
+async def reload():
+    print("Reloading...")
+    startup()
+    return ""
+
+class UpdateDocumentModel(BaseModel):
+    id: str
+    text : str
+
+@app.post("/document")
+async def update_document(data: UpdateDocumentModel):
+    result = None
+    for logic in app.manager.logics:
+        if logic.id == data.id:
+            result = logic.document.update(data.text)
+    return result
 
 class ExecuteLogicModel(BaseModel):
     id: str

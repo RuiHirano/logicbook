@@ -50,16 +50,23 @@ export const AppProvider: React.FC<{}> = ({ children }) => {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
+		console.log("reloading")
+		const api = new API()
+		api.reload()
 		let id: NodeJS.Timer
 		(async () => {
-			id = setInterval(async function () {
-				const api = new API()
+			const data = await api.getData()
+			console.log("data", data)
+			dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
+			setLoading(false)
+			/*id = setInterval(async function () {
 				const data = await api.getData()
+				console.log("data", data)
 				dispatch({ type: "UPDATE_APP", app: { ...state.app, data: data } as App })
 				setLoading(false)
-			}, 1000);
+			}, 1000);*/
 		})()
-		return () => clearInterval(id)
+		//return () => clearInterval(id)
 	}, [])
 
 	return (

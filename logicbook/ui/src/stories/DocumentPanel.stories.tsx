@@ -2,17 +2,18 @@
 
 import React from 'react';
 import { Story, Meta } from '@storybook/react'
-import MarkdownPanel, { Props } from '../components/MarkdownPanel';
+import DocumentPanel, { Props } from '../components/DocumentPanel';
 
 export default {
-  component: MarkdownPanel,
-  title: 'Components/MarkdownPanel',
+  component: DocumentPanel,
+  title: 'Components/DocumentPanel',
 };
 
-const Template: Story<Props> = args => <div style={{ height: window.innerHeight }}><MarkdownPanel {...args} /></div>;
+const Template: Story<Props> = args => <div style={{ height: window.innerHeight }}><DocumentPanel {...args} /></div>;
 
 export const Default = Template.bind({})
 Default.args = {
+  onSave: () => { console.log("save") },
   logic: {
     name: "logic1",
     tests: [{

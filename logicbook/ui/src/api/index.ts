@@ -1,10 +1,11 @@
 import axios from "axios"
-
+const SERVER_ADDRESS: string = process.env.REACT_APP_SERVER_ADDRESS ? process.env.REACT_APP_SERVER_ADDRESS : window.location.origin
+console.log("Address: ", SERVER_ADDRESS)
 export default class API {
 
     private baseURL: string
 
-    constructor(url: string = window.location.origin) {
+    constructor(url: string = SERVER_ADDRESS) {
         this.baseURL = url;
     }
 
@@ -139,4 +140,23 @@ export default class API {
         const result = res.data
         return result
     }
+
+    async reload() {
+        const res: any = await this.post({
+            url: '/reload',
+        });
+        const result = res.data
+        return result
+    }
+
+    async updateDocument(data: any) {
+        console.log(data)
+        const res: any = await this.post({
+            url: '/document',
+            data: data,
+        });
+        const result = res.data
+        return result
+    }
+
 }
